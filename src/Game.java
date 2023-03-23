@@ -13,6 +13,8 @@ import java.awt.event.*;
 //Management Method
 public class Game  extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 
+
+	//hi from ellery
 	/*
 	   _       __    ___   _    __    ___   _     ____      ___   ____  __    _      __    ___    __   _____  _   ___   _     
 	  \ \  /  / /\  | |_) | |  / /\  | |_) | |   | |_      | | \ | |_  / /`  | |    / /\  | |_)  / /\   | |  | | / / \ | |\ | 
