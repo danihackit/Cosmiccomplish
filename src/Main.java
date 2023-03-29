@@ -10,7 +10,7 @@ public class Main extends JFrame{
 	private static final int HEIGHT=725;
 	
 	public Main () {
-		super("Space Invaders");
+		super("Cosmiccomplish");
 		setSize(WIDTH, HEIGHT);
 		Game play = new Game();
 		((Component) play).setFocusable(true);
