@@ -25,21 +25,59 @@
 
 Game Features:
 
-- Home Screen
-	- About Screen
-	- Startup Screen/First Time Education
+- Home Screen - 3.30.23
+e	x Background/Graphics
+e	x Buttons
+d	x About Screen
+ed	- Startup Screen/First Time Education -> Story of your astronaut
+d	x Play
+d	x Store (empty)
 
 - Task list
+	- Task input
+	- Task display
+	- Difficulty change
+	- Finishing tasks and earning rewards
+	- Focusing on a task
+	- Ordered tasks
 
 - Planet Timer
+	- User sets time
+	- Display timer and make it work!
+	- Ship rotates around planet
+	- Timer ends -> rewards
+	- Longer timer = more rewards
 
 - Minigames
 	- Spaceball
+	- Asterdroid
+	- Space Invaders
+	- Finish something -> play random game (you can select not to)
 
 - Astronaut Task Animations
+	- Choice between planet and astronaut view
+	- Make gifs of doing appx. 12 tasks
+	- Incorporate them and randomize them
+
+- Store for items
+	- In-game currency = Stars
+	- Buy real-world rewards for yourself (set your own price!)
+	- Buy items
+	- Items appear in your ship
+	- Update your ship
+	- Change your planet
+	- Add stuff to your planet
+	- Get snacks and stuff for astronaut
+	- Astronaut eats snacks
 
 - Save Files
+	- Save coins
+	- Save unlocked and applied
+	- Read file
 
+If We Have Time
+	- Random chance rewards
+	- Customize avatar
    ___             _         __    ___                _                        __    
   / _ \_______    (_)__ ____/ /_  / _ \___ ___ ___ __(_)______ __ _  ___ ___  / /____
  / ___/ __/ _ \  / / -_) __/ __/ / , _/ -_) _ `/ // / / __/ -_)  ' \/ -_) _ \/ __(_-<
@@ -84,22 +122,6 @@ x Win/Lose/timer = 20 points
 
 My Score: 100%
 
-
-if(!activeAlienShips.isEmpty()) {
-			for(int j=0; j<activeAlienShips.size(); j++) {
-				g2d.drawImage(activeAlienShips.get(j).getImg().getImage(),activeAlienShips.get(j).getX(), activeAlienShips.get(j).getY(), activeAlienShips.get(j).getW(), activeAlienShips.get(j).getH(), this);
-				
-				for(int k = 0; k<activePlayerProjectiles.size();k++) {
-					if(((activeAlienShips.get(j).getY() <= activePlayerProjectiles.get(k).getY() + activePlayerProjectiles.get(k).getH() && activePlayerProjectiles.get(k).getY() <= activeAlienShips.get(j).getY() + activeAlienShips.get(j).getH()) && (activeAlienShips.get(j).getX() <= activePlayerProjectiles.get(k).getX() + activePlayerProjectiles.get(k).getW() && activePlayerProjectiles.get(k).getX() <= activeAlienShips.get(j).getX() + activeAlienShips.get(j).getW())) && activePlayerProjectiles.get(k).getYm()> 0){
-						activePlayerProjectiles.remove(k);
-						activeAlienShips.remove(j);
-						
-						//Object 1 = Projectile -> activePlayerProjectiles.get(k).get
-						//Object 2 = Alienship -> activeAlienShips.get(j).get
-					} 
-				}
-			}
-		}
 
 Collision code:
 if(((object2Y <= object1Y + object1H && object1Y <= object2Y + object2H) && (object2X <= object1X + object1W && object1X <= object2X + object2W)) && moving object's y Movement > 0){

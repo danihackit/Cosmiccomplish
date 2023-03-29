@@ -32,6 +32,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	private Button aboutButton;
 	private Button storeButton;
+	private Button homeButton;
 	
 	//Integers
 	private int key;
@@ -48,6 +49,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Strings
 	private String screenstatus = "Start Up";
+	
 	
 	/*
 	  _       __    _       __    __    ____  _      ____  _     _____ 
@@ -68,11 +70,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		called = false;
 		astronautNeeded = false;
 		
-		startButton = new Button(0, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
+		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 		
-		aboutButton = new Button (200,300,140,56, new ImageIcon ("About Button.PNG"));
+		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
 		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton.png"));
+		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 	}
 
 	//Run Method
@@ -209,12 +212,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
 		g2d.setColor(Color.white);
 		g2d.drawString("About",500,500);
+		drawButton(g2d, homeButton);
 	}
 	
 	private void StoreScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
+		g2d.drawImage(new ImageIcon("Store Header.png").getImage(), 500,200,280,140,this);
 		g2d.setColor(Color.white);
 		g2d.drawString("Store", 500, 500);
+		drawButton(g2d, homeButton);
 	}
 	
 	
@@ -360,6 +366,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		
+		
+		if(homeButton.hover(e.getX(), e.getY())) {
+			homeButton.setImg(new ImageIcon ("HomeButtonHover.png"));
+		} else {
+			homeButton.setImg(new ImageIcon("HomeButton.png"));
+		}
+		
 	}
 
 	//Mouse Clicked Methods
@@ -378,6 +391,18 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				screenstatus = "About";
 			} else if(storeButton.hover(e.getX(), e.getY())) {
 				screenstatus = "Store";
+			}
+		}
+		
+		if(screenstatus.equals("About")) {
+			if(homeButton.hover(e.getX(), e.getY())) {
+				screenstatus = "Start";
+			}
+		}
+		
+		if(screenstatus.equals("Store")) {
+			if(homeButton.hover(e.getX(), e.getY())) {
+				screenstatus = "Start";
 			}
 		}
 		

@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 public class Main extends JFrame{
 	private static final int WIDTH =1400;
+	//width = 1400
 	private static final int HEIGHT=725;
 	
 	public Main () {
