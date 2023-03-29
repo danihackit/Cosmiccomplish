@@ -21,6 +21,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
  	   TODO Variable Declaration
 	 */
 	
+
+	 //HELLO ELLERY! FROM DANI
+	 //Adding another comment to check
+
 	//Management Variables
 	private BufferedImage back; 
 	private File file;
