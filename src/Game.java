@@ -49,6 +49,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Strings
 	private String screenstatus = "Start Up";
+	Scanner scan;
+	private String input = "hello";
 	
 	//HELLO!
 	/*
@@ -113,6 +115,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setFont( new Font("Courier New", Font.BOLD, 20));
 		g2d.setColor(Color.WHITE);
 		((Graphics2D) g2d).setStroke(new BasicStroke(10));
+		
+		//Dani
+		/*if(scan.hasNext()) {
+			taskInput(g2d);
+		}
+		*/
 		
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
@@ -232,6 +240,17 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 	
+	//Dani added this- lol doesn't work 
+	public void taskInput(Graphics g2d) {
+		if(scan.hasNext()) {
+			input = scan.nextLine();
+			System.out.println("user input"+input);
+			g2d.drawString(input, 500,500);
+			//scan.close();
+		}
+		else
+			input = "hello";
+	}
 		
 	
 	/*
