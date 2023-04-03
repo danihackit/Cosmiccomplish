@@ -7,12 +7,10 @@ import java.util.Scanner;
 
 public class Main extends JFrame{
 	private static final int WIDTH =1400;
-	//width = 1400
 	private static final int HEIGHT=725;
-	//Scanner scan;
 	
 	public Main () {
-		super("Cosmiccomplish");
+		super("Space Invaders");
 		setSize(WIDTH, HEIGHT);
 		Game play = new Game();
 		((Component) play).setFocusable(true);
@@ -74,11 +72,17 @@ public class Main extends JFrame{
 	public static void main(String[] args) {
 		Main run = new Main();
 		
-		Scanner input = new Scanner(System.in);
-		String userinput = input.nextLine();
-		System.out.println("user entered: "+userinput);
-		
-		
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("Enter name, age and salary:");
+
+		String name = scanner.nextLine();
+		int age = scanner.nextInt();
+		int salary = scanner.nextInt();
+
+		System.out.println("Name: " + name);
+		System.out.println("Age: " + age);
+		System.out.println("Salary: " + salary);
 
 	}
 
