@@ -3,13 +3,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Scanner;
 
 public class Main extends JFrame{
 	private static final int WIDTH =1400;
+	//width = 1400
 	private static final int HEIGHT=725;
+	//Scanner scan;
 	
 	public Main () {
-		super("Space Invaders");
+		super("Cosmiccomplish");
 		setSize(WIDTH, HEIGHT);
 		Game play = new Game();
 		((Component) play).setFocusable(true);
@@ -70,6 +73,11 @@ public class Main extends JFrame{
 
 	public static void main(String[] args) {
 		Main run = new Main();
+		
+		Scanner input = new Scanner(System.in);
+		String userinput = input.nextLine();
+		System.out.println("user entered: "+userinput);
+		
 		
 
 	}

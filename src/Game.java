@@ -38,6 +38,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button storeButton;
 	private Button homeButton;
 	
+	//HELLO!
 	//Integers
 	private int key;
 	private int mvmfactor;
@@ -53,8 +54,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Strings
 	private String screenstatus = "Start Up";
+	Scanner scan;
+	private String input = "hello";
 	
-	
+	//HELLO!
 	/*
 	  _       __    _       __    __    ____  _      ____  _     _____ 
 	 | |\/|  / /\  | |\ |  / /\  / /`_ | |_  | |\/| | |_  | |\ |  | |  
@@ -74,11 +77,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		called = false;
 		astronautNeeded = false;
 		
-		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
+		startButton = new Button(220, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
+		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
 		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton.png"));
+		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 	}
 
@@ -117,6 +122,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setFont( new Font("Courier New", Font.BOLD, 20));
 		g2d.setColor(Color.WHITE);
 		((Graphics2D) g2d).setStroke(new BasicStroke(10));
+		
+		//Dani
+		/*if(scan.hasNext()) {
+			taskInput(g2d);
+		}
+		*/
 		
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
@@ -236,6 +247,17 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 	
+	//Dani added this- lol doesn't work 
+	public void taskInput(Graphics g2d) {
+		if(scan.hasNext()) {
+			input = scan.nextLine();
+			System.out.println("user input"+input);
+			g2d.drawString(input, 500,500);
+			//scan.close();
+		}
+		else
+			input = "hello";
+	}
 		
 	
 	/*
