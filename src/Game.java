@@ -21,6 +21,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
  	   TODO Variable Declaration
 	 */
 	
+
+	 //HELLO ELLERY! FROM DANI
+	 //Adding another comment to check
+
 	//Management Variables
 	private BufferedImage back; 
 	private File file;
@@ -33,6 +37,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button aboutButton;
 	private Button storeButton;
 	private Button homeButton;
+
+	private Task newtask;
 	
 	//HELLO!
 	//Integers
@@ -47,11 +53,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean recentright;
 	private boolean called;
 	private boolean astronautNeeded;
+	private boolean inputStat = false;
 	
 	//Strings
 	private String screenstatus = "Start Up";
 	Scanner scan;
-	private String input = "hello";
+	private String currentInput = new String("");
+	//Array Lists
+	private ArrayList <Task> tasks = new ArrayList();
 	
 	//HELLO!
 	/*
@@ -62,6 +71,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 TODO Management
 	 */
 	public Game() {
+		//testInput();
 		
 		//Thread Setup
 		new Thread(this).start();	
@@ -77,7 +87,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
+		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
 		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton.png"));
+		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 	}
 
@@ -117,11 +129,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setColor(Color.WHITE);
 		((Graphics2D) g2d).setStroke(new BasicStroke(10));
 		
-		//Dani
-		/*if(scan.hasNext()) {
-			taskInput(g2d);
-		}
-		*/
+		
+
 		
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
@@ -134,6 +143,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			AboutScreen(g2d);
 		} else if(screenstatus.equals("Store")) {
 			StoreScreen(g2d);
+		} else if(screenstatus.equals("Input")){
+			InputScreen(g2d);
 		}
 		
 		//Astronaut
@@ -231,27 +242,26 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.drawString("Store", 500, 500);
 		drawButton(g2d, homeButton);
 	}
+
+	private void InputScreen(Graphics g2d){
+		
+		drawScreen(g2d, new ImageIcon("server room.png"));
+		g2d.setColor(Color.white);
+		//g2d.drawString("Task:"+tasks.get(0).getTaskName(), 100,100);
+		g2d.drawString("Input: " + currentInput, 100,200); 
+		
+	}
 	
 	
 	/*
  	 ___   _   __   ___   _      __    _    
 	| | \ | | ( (` | |_) | |    / /\  \ \_/ 
-	|_|_/ |_| _)_) |_|   |_|__ /_/--\  |_|  
+	|_|_/ |_| _)_) |_|   |_|__ /_/--\  |_|  s
 	
 	TODO Display
 	 */
 	
-	//Dani added this- lol doesn't work 
-	public void taskInput(Graphics g2d) {
-		if(scan.hasNext()) {
-			input = scan.nextLine();
-			System.out.println("user input"+input);
-			g2d.drawString(input, 500,500);
-			//scan.close();
-		}
-		else
-			input = "hello";
-	}
+	
 		
 	
 	/*
@@ -294,8 +304,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		key= e.getKeyCode();
-		System.out.println(key);
-		
+		System.out.println(key+ " - " + e.getKeyChar());
+	
+		if(!inputStat){
 		if(key == 65 || key == 37) { // A or <-
 			astronaut.move(-mvmfactor, 0);
 			moving = true;
@@ -321,6 +332,29 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(key==72) { //h for home
 			screenstatus = ("Start");
 		}
+		
+		if(key==73){ // I
+			screenstatus = ("Input");
+			inputStat = true;
+		}
+		}
+		else{
+			char characterList[] = {'a', 'b', 'c', 'd', 'e','f', 'g', 'h', 'i', 'j', 'k','l','m','n', 'o','p', 'q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0', ' '};
+			char character = e.getKeyChar();
+			boolean shift;
+
+			for(int i=0; i<characterList.length;i++){
+				if(character==(characterList[i])){
+					currentInput = currentInput + characterList[i];
+				} else {
+					if(key == 8){
+						currentInput = currentInput.substring(0,currentInput.length()-1);
+						key = 0;
+					}
+				}
+			}
+		}
+
 		
 	}
 
@@ -513,5 +547,25 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		//Refresh File
 		public void refreshFromFile() {
 			
+		}
+
+		public void testInput(){
+			Scanner scanner = new Scanner(System.in);
+
+			System.out.println("Task:");
+			String task = scanner.nextLine();
+
+			System.out.println("Due Date:");
+			String dueDate = scanner.nextLine();
+
+			System.out.println("Difficulty (1-10):");
+			int difficulty = scanner.nextInt();
+
+			System.out.println("Position in Queue");
+			int positionInQueue = scanner.nextInt();
+
+			newtask = new Task(difficulty, task, dueDate, positionInQueue);
+			tasks.add(newtask);
+			System.out.println(tasks.get(0).getTaskName());
 		}
 }
