@@ -304,7 +304,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		key= e.getKeyCode();
-		System.out.println(key+ " - " + e.getKeyChar());
+		//System.out.println(key+ " - " + e.getKeyChar());
 	
 		if(!inputStat){
 		if(key == 65 || key == 37) { // A or <-
@@ -339,19 +339,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		}
 		else{
-			char characterList[] = {'a', 'b', 'c', 'd', 'e','f', 'g', 'h', 'i', 'j', 'k','l','m','n', 'o','p', 'q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0', ' '};
 			char character = e.getKeyChar();
-			boolean shift;
 
-			for(int i=0; i<characterList.length;i++){
-				if(character==(characterList[i])){
-					currentInput = currentInput + characterList[i];
-				} else {
-					if(key == 8){
-						currentInput = currentInput.substring(0,currentInput.length()-1);
-						key = 0;
-					}
-				}
+			if(key!=16 && key!=8){
+				currentInput = currentInput + character;
+			}  else if(key == 8){
+				currentInput = currentInput.substring(0,currentInput.length()-1);
+				key = 0;
 			}
 		}
 
