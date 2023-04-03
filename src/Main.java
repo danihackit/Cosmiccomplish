@@ -72,19 +72,6 @@ public class Main extends JFrame{
 
 	public static void main(String[] args) {
 		Main run = new Main();
-		
-		Scanner scanner = new Scanner(System.in);
-
-		System.out.println("Enter name, age and salary:");
-
-		String name = scanner.nextLine();
-		int age = scanner.nextInt();
-		int salary = scanner.nextInt();
-
-		System.out.println("Name: " + name);
-		System.out.println("Age: " + age);
-		System.out.println("Salary: " + salary);
-
 	}
 
 

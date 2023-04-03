@@ -37,6 +37,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button aboutButton;
 	private Button storeButton;
 	private Button homeButton;
+
+	private Task newtask;
 	
 	//HELLO!
 	//Integers
@@ -56,6 +58,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private String screenstatus = "Start Up";
 	Scanner scan;
 	private String input = "hello";
+
+	//Array Lists
+	private ArrayList <Task> tasks = new ArrayList();
 	
 	//HELLO!
 	/*
@@ -66,6 +71,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 TODO Management
 	 */
 	public Game() {
+		testInput();
 		
 		//Thread Setup
 		new Thread(this).start();	
@@ -77,7 +83,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		called = false;
 		astronautNeeded = false;
 		
-		startButton = new Button(220, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
+		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
@@ -128,6 +134,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			taskInput(g2d);
 		}
 		*/
+
 		
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
@@ -519,5 +526,25 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		//Refresh File
 		public void refreshFromFile() {
 			
+		}
+
+		public void testInput(){
+			Scanner scanner = new Scanner(System.in);
+
+			System.out.println("Task:");
+			String task = scanner.nextLine();
+
+			System.out.println("Due Date:");
+			String dueDate = scanner.nextLine();
+
+			System.out.println("Difficulty (1-10):");
+			int difficulty = scanner.nextInt();
+
+			System.out.println("Position in Queue");
+			int positionInQueue = scanner.nextInt();
+
+			newtask = new Task(difficulty, task, dueDate, positionInQueue);
+			tasks.add(newtask);
+			System.out.println(tasks.get(0).getTaskName());
 		}
 }
