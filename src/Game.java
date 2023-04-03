@@ -34,6 +34,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button storeButton;
 	private Button homeButton;
 	
+	//HELLO!
 	//Integers
 	private int key;
 	private int mvmfactor;
