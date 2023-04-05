@@ -39,6 +39,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button aboutButton;
 	private Button storeButton;
 	private Button homeButton;
+	private Button taskButton;
 
 	private Task newtask;
 
@@ -101,6 +102,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton.png"));
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
+		taskButton = new Button(600,550,140,56, new ImageIcon("Task Button.png"));
 	}
 
 	//Run Method
@@ -214,6 +216,18 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private void drawButton(Graphics g2d, Button button) {
 		g2d.drawImage(button.getImg().getImage(), button.getX(), button.getY(), button.getW(), button.getH(), this);
 	}
+
+	public int centerXPosition(int objectWidth){
+		int temp;
+		temp = getWidth()/2-(objectWidth/2);
+		return temp;
+	}
+
+	public int centerYPosition(int objectHeight){
+		int temp;
+		temp = getHeight()/2-(objectHeight/2);
+		return temp;
+	}
 	
 	/*
  	 __   __    ___   ____  ____  _          _      ____ _____  _     ___   ___   __  
@@ -247,6 +261,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 	private void PlayScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("placeholder.png"));
+		drawButton(g2d, taskButton);
 	}
 	
 	private void AboutScreen(Graphics g2d) {
@@ -268,11 +283,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		//drawScreen(g2d, new ImageIcon("server room.png"));
 		g2d.setColor(Color.white);
+		inputStat=true;
 		if(!tasks.isEmpty()){
 			g2d.drawString("Task:"+tasks.get(0).getTaskName(), 100,100);
 		}
+		drawScreen(g2d, new ImageIcon("Cork Board Background.png"));
+		g2d.drawImage(new ImageIcon("Sticky Note.png").getImage(),centerXPosition(600), centerYPosition(600),600,600,this);
 		//g2d.drawString("Input: " + currentInput, 100,200); 
-		typeToFont(g2d, currentInput, 50, 50,100);
+		typeToFont(g2d, currentInput, centerXPosition(600) + 25, centerYPosition(600)+100, 30, centerXPosition(600)+590);
 
 	}
 	
@@ -285,7 +303,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 	
-	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int fontSize) {
+	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int fontSize, int margin) {
 		int xAddedValue = 0;
 		int yAddedValue = 0;
 		for(int i=0; i<inputString.length();i++) {
@@ -301,14 +319,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				xAddedValue += fontSize + (fontSize * 3 / 10);
 			}
 
-			if(xValue + xAddedValue + (fontSize * 13/10) > getWidth()) {
+			if(xValue + xAddedValue + (fontSize * 13/10) > margin) {
 				xAddedValue = 0;
-				yAddedValue += (fontSize +25);
+				yAddedValue += (fontSize +10);
 			}
 
 			if(newLetter.getAffiliatedCharacter() == '\n'){
 				xAddedValue = 0;
-				yAddedValue += (fontSize +25);
+				yAddedValue += (fontSize +10);
 			}
 		}
 	}
@@ -504,6 +522,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		} else {
 			homeButton.setImg(new ImageIcon("HomeButton.png"));
 		}
+		if(taskButton.hover(e.getX(), e.getY())){
+			taskButton.setImg(new ImageIcon("Task Button Hover.png"));
+		}else{
+			taskButton.setImg(new ImageIcon("Task Button.png"));
+		}
+		
 		
 	}
 
@@ -537,6 +561,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				screenstatus = "Start";
 			}
 		}
+		
+		if(taskButton.hover(e.getX(), e.getY())){
+			screenstatus = "Input";
+		}
+		
 		
 	}
 

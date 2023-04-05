@@ -172,6 +172,10 @@ public class Letter {
             returnValue = new ImageIcon("#.png");
         } else if(ACI == '*'){
             returnValue = new ImageIcon("asterisk.png");
+        } else if(ACI == ';'){
+            returnValue = new ImageIcon("semicolon.png");
+        } else if(ACI == ':'){
+            returnValue = new ImageIcon("colon.png");
         }
 
 
