@@ -54,6 +54,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Integers
 	private int key;
 	private int mvmfactor;
+	private int deleteStop =0;
 	
 	//Other Numbers
 	private long starttime;
@@ -65,6 +66,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean astronautNeeded;
 	private boolean inputStat = false;
 	private boolean make;
+	private boolean typingPermitted = true;
 	
 	//Strings
 	private String screenstatus = "Start Up";
@@ -290,7 +292,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawScreen(g2d, new ImageIcon("Cork Board Background.png"));
 		g2d.drawImage(new ImageIcon("Sticky Note.png").getImage(),centerXPosition(600), centerYPosition(600),600,600,this);
 		//g2d.drawString("Input: " + currentInput, 100,200); 
-		typeToFont(g2d, currentInput, centerXPosition(600) + 25, centerYPosition(600)+100, 30, centerXPosition(600)+590);
+		typeToFont(g2d, currentInput, centerXPosition(600) + 25, centerYPosition(600)+100, 30, centerXPosition(600)+590, 0, 400);
 
 	}
 	
@@ -303,9 +305,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 	
-	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int fontSize, int margin) {
+	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int fontSize, int margin, int deleteStopI, int yMaxI) {
 		int xAddedValue = 0;
 		int yAddedValue = 0;
+		deleteStop = deleteStopI;
 		for(int i=0; i<inputString.length();i++) {
 			Letter newLetter = new Letter(inputString.charAt(i));
 			g2d.drawImage(newLetter.getAffiliatedImage().getImage(),xValue+xAddedValue,yValue+yAddedValue,fontSize,fontSize,this);
@@ -327,6 +330,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(newLetter.getAffiliatedCharacter() == '\n'){
 				xAddedValue = 0;
 				yAddedValue += (fontSize +10);
+			}
+
+			if(yValue + yAddedValue > yMaxI){
+				typingPermitted = false;
 			}
 		}
 	}
@@ -409,7 +416,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		else{
 			char character = e.getKeyChar();
 
-			if(key!=16 && key!=8){
+			if(key!=16 && key!=8 && typingPermitted){
 				for(int i=currentInput.length(); i>0;i--) {
 					if(currentInput.substring(i-1,i).equals("|")) {
 						currentInput = currentInput.substring(0,i-1) + currentInput.substring(i,currentInput.length());
@@ -417,7 +424,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 					}
 				}
 				currentInput = currentInput + character;
-			}  else if(key == 8 && currentInput.length()>0){
+			}  else if(key == 8 && currentInput.length()>deleteStop){
 				if(currentInput.length()==1) {
 					currentInput = "";
 				} else {
