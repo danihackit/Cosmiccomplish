@@ -3,7 +3,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Main extends JFrame{
 	private static final int WIDTH =1400;
