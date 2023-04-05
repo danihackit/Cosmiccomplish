@@ -1,25 +1,21 @@
-import java.awt.Rectangle;
-
-import javax.swing.ImageIcon;
-
 public class Task {
-	private int rewardValue;
+	private String rewardValue;
 	private String taskName;
 	private String dueDate;
-	private int positionInQueue;
+	private String positionInQueue;
 	
 	public Task() {
-		rewardValue = 0;
+		rewardValue = "null";
 		taskName = "null task";
 		dueDate = "never";
-		positionInQueue = 0;
+		positionInQueue = "null";
 	}
 	
-	public int getRewardValue() {
+	public String getRewardValue() {
 		return rewardValue;
 	}
 
-	public void setRewardValue(int rewardValue) {
+	public void setRewardValue(String rewardValue) {
 		this.rewardValue = rewardValue;
 	}
 
@@ -39,15 +35,15 @@ public class Task {
 		this.dueDate = dueDate;
 	}
 
-	public int getPositionInQueue() {
+	public String getPositionInQueue() {
 		return positionInQueue;
 	}
 
-	public void setPositionInQueue(int positionInQueue) {
+	public void setPositionInQueue(String positionInQueue) {
 		this.positionInQueue = positionInQueue;
 	}
 
-	public Task (int rewardValueI, String taskNameI, String dueDateI, int positionInQueueI) {
+	public Task (String rewardValueI, String taskNameI, String dueDateI, String positionInQueueI) {
 		rewardValue = rewardValueI;
 		taskName = taskNameI;
 		dueDate = dueDateI;

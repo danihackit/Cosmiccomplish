@@ -266,11 +266,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 	private void InputScreen(Graphics g2d){
 
-		drawScreen(g2d, new ImageIcon("server room.png"));
+		//drawScreen(g2d, new ImageIcon("server room.png"));
 		g2d.setColor(Color.white);
-		//g2d.drawString("Task:"+tasks.get(0).getTaskName(), 100,100);
-		g2d.drawString("Input: " + currentInput, 100,200); 
-		typeToFont(g2d, currentInput, 100, 300);
+		if(!tasks.isEmpty()){
+			g2d.drawString("Task:"+tasks.get(0).getTaskName(), 100,100);
+		}
+		//g2d.drawString("Input: " + currentInput, 100,200); 
+		typeToFont(g2d, currentInput, 50, 50,100);
 
 	}
 	
@@ -283,26 +285,31 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 	
-	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue) {
+	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int fontSize) {
 		int xAddedValue = 0;
 		int yAddedValue = 0;
 		for(int i=0; i<inputString.length();i++) {
 			Letter newLetter = new Letter(inputString.charAt(i));
-			g2d.drawImage(newLetter.getAffiliatedImage().getImage(),xValue+xAddedValue,yValue+yAddedValue,50,50,this);
+			g2d.drawImage(newLetter.getAffiliatedImage().getImage(),xValue+xAddedValue,yValue+yAddedValue,fontSize,fontSize,this);
 
 			if(newLetter.getDimension() == 'M') {
-				xAddedValue += 50;
+				xAddedValue += fontSize;
 			} else if(newLetter.getDimension() == 'S') {
-				xAddedValue += 40;
+				xAddedValue += (fontSize * 4/5);
 			} else {
-				xAddedValue += 65;
+				//xAddedValue += fontSize*2;
+				xAddedValue += fontSize + (fontSize * 3 / 10);
 			}
 
-			if(xValue + xAddedValue + 65 > getWidth()) {
+			if(xValue + xAddedValue + (fontSize * 13/10) > getWidth()) {
 				xAddedValue = 0;
-				yAddedValue += 75;
+				yAddedValue += (fontSize +25);
 			}
 
+			if(newLetter.getAffiliatedCharacter() == '\n'){
+				xAddedValue = 0;
+				yAddedValue += (fontSize +25);
+			}
 		}
 	}
 		
@@ -403,7 +410,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			if(key==10) {
 
-				if(temporaryTaskName.length()== 0) {
+				/*if(temporaryTaskName.length()== 0) {
 					temporaryTaskName = currentInput;
 				} else if(temporaryTaskDate.length()==0) {
 					temporaryTaskDate = currentInput;
@@ -417,6 +424,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				System.out.println("Task Date: " + temporaryTaskDate);
 				System.out.println("Task Reward: " + temporaryTaskReward);
 				System.out.println("Task PositionInQueue: " + temporaryTaskPositionInQueue);
+
+				if(!temporaryTaskName.equals("") && !temporaryTaskDate.equals("") && !temporaryTaskReward.equals("") && !temporaryTaskPositionInQueue.equals("")){
+					tasks.add(new Task(temporaryTaskReward, temporaryTaskName,temporaryTaskDate,temporaryTaskPositionInQueue));
+				}*/
+
 			}
 		}
 
@@ -630,7 +642,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			System.out.println("Position in Queue");
 			int positionInQueue = scanner.nextInt();
 
-			newtask = new Task(difficulty, task, dueDate, positionInQueue);
+			//newtask = new Task(difficulty, task, dueDate, positionInQueue);
 			tasks.add(newtask);
 			System.out.println(tasks.get(0).getTaskName());
 		}

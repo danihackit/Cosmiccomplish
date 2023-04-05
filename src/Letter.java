@@ -1,5 +1,5 @@
-import java.awt.Rectangle;
-import java.lang.*;
+//import java.awt.Rectangle;
+//import java.lang.*;
 import javax.swing.ImageIcon;
 
 public class Letter {
@@ -162,7 +162,17 @@ public class Letter {
 			returnValue = new ImageIcon("quotes.png");
 		} else if(Character.toString(ACI).equals("'")) {
 			returnValue = new ImageIcon("'.png");
-		}
+		} else if(ACI == '\n'){
+            returnValue = new ImageIcon("null.png");
+        } else if(ACI == '_'){
+            returnValue = new ImageIcon("_.png");
+        } else if(ACI == '$'){
+            returnValue = new ImageIcon("$.png");
+        } else if(ACI == '#'){
+            returnValue = new ImageIcon("#.png");
+        } else if(ACI == '*'){
+            returnValue = new ImageIcon("asterisk.png");
+        }
 
 
 
@@ -177,9 +187,9 @@ public class Letter {
 		AD = Character.toUpperCase(affiliatedCharacter);
 		char returnValue = ' ';
 
-		if(AD == 'I' || AD == '1' || AD == '.' || AD == ',' || AD == ';' || AD == ':' || AD == '!' || AD == ' ') {
+		if(AD == 'I' || AD == '1' || AD == '.' || AD == ',' || AD == ';' || AD == ':' || AD == '!' || AD == ' ' || AD == '<' || AD == '>') {
 			returnValue = 'S';
-		} else if(AD == 'M' || AD == 'W' || AD == 'T' || AD == 'V' || AD == 'Y' || AD == 'Z'){
+		} else if(AD == 'M' || AD == 'W' || AD == 'T' || AD == 'V' || AD == 'Y' || AD == '@' || AD == '_' || AD == '$' || AD == '#'){
 			returnValue = 'L';
 		} else {
 			returnValue = 'M';
