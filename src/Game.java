@@ -41,7 +41,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button homeButton;
 	private Button taskButton;
 	
-	private TextBox taskNameInput, taskDateInput;
+	private TextBox taskNameInput, taskDateInput, taskRewardInput;
 
 	private Task newtask;
 
@@ -113,7 +113,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 6, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 10, false, "Due Date: ");
-
+		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,30,8,false, "Reward: ");
 	}
 
 	//Run Method
@@ -214,7 +214,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		
 		//System.out.println(currentInputBox);
-		
+		System.out.println(currentInput);
 		//Management
 		twoDgraph.drawImage(back, null, 0, 0);
 }
@@ -312,6 +312,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		//Task Name Text Box
 		typeTextBoxToFont(g2d,taskNameInput,30);
 		typeTextBoxToFont(g2d,taskDateInput,30);
+		typeTextBoxToFont(g2d, taskRewardInput, 30);
 	}
 	
 	
@@ -445,7 +446,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			
 			currentInput = currentInputBox.getAffiliatedText();
 									
-			if(key!=16 && key!=8 && currentInputBox.getInputStatus() && currentInputBox.getInputStatus()){
+			if(key!=16 && key!=8 && currentInputBox.getInputStatus()){
 				for(int i=currentInput.length(); i>0;i--) {
 					if(currentInput.substring(i-1,i).equals("|")) {
 						currentInput = currentInput.substring(0,i-1) + currentInput.substring(i,currentInput.length());
@@ -459,7 +460,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				} else {
 					currentInput = currentInput.substring(0,currentInput.length()-2);
 				}
-				key = 0;
+				//key = 0;
+			} else if (currentInput.length()<=deleteStop){
+				currentInputBox.setInputStatus(false);
+				key=0;
 			}
 			
 			currentInputBox.setAffiliatedText(currentInput);
@@ -586,6 +590,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			currentInput = currentInput.substring(0,currentInput.length()-1);
 			a.setAffiliatedText(currentInput);
 		}
+		//okay doing this and commenting out a=null did nothing: a.setInputStatus(false);
 		a = null;
 	}
 	//Mouse Clicked Methods
@@ -631,13 +636,26 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			operateTextBox(taskNameInput);
 		} else if (!currentInput.equals(null)){
 			doNotOperateTextBox(taskNameInput);
+		} else if (!taskNameInput.hover(e.getX(), e.getY())){
+			doNotOperateTextBox(taskNameInput);
 		}
-		
+
 		if(taskDateInput.hover(e.getX(), e.getY())) {
 			operateTextBox(taskDateInput);
 		} else if (!currentInput.equals(null)){
 			doNotOperateTextBox(taskDateInput);
+		} else if (!taskDateInput.hover(e.getX(), e.getY())){
+			doNotOperateTextBox(taskDateInput);
 		}
+
+		if(taskRewardInput.hover(e.getX(), e.getY())) {
+			operateTextBox(taskRewardInput);
+		} else if (!currentInput.equals(null)){
+			doNotOperateTextBox(taskRewardInput);
+		} else if (!taskRewardInput.hover(e.getX(), e.getY())){
+			doNotOperateTextBox(taskRewardInput);
+		}
+		
 		
 	}
 
