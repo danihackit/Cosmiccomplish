@@ -103,11 +103,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 		
-		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
-		aboutButton = new Button (350,300,140,56, new ImageIcon ("About Button.PNG"));
-		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton.png"));
-		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
-		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton.png"));
+		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
+		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
+		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton2.png"));
+		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
+		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
 		taskButton = new Button(600,550,140,56, new ImageIcon("Task Button.png"));
 		
 		System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
@@ -278,7 +278,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 
 	private void PlayScreen(Graphics g2d) {
-		drawScreen(g2d, new ImageIcon("placeholder.png"));
+		drawScreen(g2d, new ImageIcon("End Frame.png"));
 		drawButton(g2d, taskButton);
 	}
 	
@@ -542,30 +542,32 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			
 			
 			if(aboutButton.hover(e.getX(), e.getY())) {
-				aboutButton.setImg(new ImageIcon ("AboutButtonHover.PNG"));
+				aboutButton.setImg(new ImageIcon ("AboutHover2.png"));
 			} else {
-				aboutButton.setImg(new ImageIcon("About Button.PNG"));
+				aboutButton.setImg(new ImageIcon("AboutButtonn2.png"));
 			}
 			
 			if(storeButton.hover(e.getX(), e.getY())) {
-				storeButton.setImg(new ImageIcon ("StoreButtonHover.png"));
+				storeButton.setImg(new ImageIcon ("StoreHover2.png"));
 			} else {
-				storeButton.setImg(new ImageIcon("StoreButton.png"));
+				storeButton.setImg(new ImageIcon("StoreButton2.png"));
 			}
 		}
 		
 		
 		if(homeButton.hover(e.getX(), e.getY())) {
-			homeButton.setImg(new ImageIcon ("HomeButtonHover.png"));
+			homeButton.setImg(new ImageIcon ("HomeHover2.png"));
 		} else {
-			homeButton.setImg(new ImageIcon("HomeButton.png"));
-		}
-		if(taskButton.hover(e.getX(), e.getY())){
-			taskButton.setImg(new ImageIcon("Task Button Hover.png"));
-		}else{
-			taskButton.setImg(new ImageIcon("Task Button.png"));
+			homeButton.setImg(new ImageIcon("HomeButton2.png"));
 		}
 		
+		if(screenstatus.equals("Play")){
+			if(taskButton.hover(e.getX(), e.getY())){
+				taskButton.setImg(new ImageIcon("Task Button Hover.png"));
+			}else{
+				taskButton.setImg(new ImageIcon("Task Button.png"));
+			}
+		}
 		
 	}
 	
@@ -617,9 +619,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		
-		if(taskButton.hover(e.getX(), e.getY())){
-			screenstatus = "Input";
+		if(screenstatus.equals("Play")) {
+			if(taskButton.hover(e.getX(), e.getY())){
+				screenstatus = "Input";
+			}
 		}
+		
 		
 		
 		if(taskNameInput.hover(e.getX(), e.getY())) {
