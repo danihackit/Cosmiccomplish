@@ -113,7 +113,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 6, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 10, false, "Due Date: ");
-		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,30,8,false, "Reward: ");
+		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,8,false, "Reward: ");
 	}
 
 	//Run Method
@@ -441,7 +441,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			inputStat = true;
 		}
 		}
-		else{
+		
+		if(!(currentInputBox==null)) {
 			char character = e.getKeyChar();
 			
 			currentInput = currentInputBox.getAffiliatedText();
