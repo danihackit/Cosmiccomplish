@@ -41,6 +41,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button homeButton;
 	private Button taskButton;
 	private Button finishedInputtingTask;
+	private Button XButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 
@@ -50,6 +51,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private String temporaryTaskDate = new String("");
 	private String temporaryTaskReward = new String("");
 	private String temporaryTaskPositionInQueue = new String("");
+
+	private String iteratedDate, iteratedName, iteratedReward, iteratedPosition;
 	
 	private TextBox currentInputBox;
 
@@ -73,6 +76,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean make;
 	private boolean typingPermitted = true;
 	private boolean finishEnteringTaskNotif = false;
+	private boolean taskAdded = false;
 	
 	//Strings
 	private String screenstatus = "Start Up";
@@ -112,6 +116,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
 		taskButton = new Button(600,550,140,56, new ImageIcon("Task Button.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
+		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
 		
 		//System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
@@ -192,8 +197,17 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		//work on this 
 		if(finishEnteringTaskNotif){
-			g2d.drawString("Please Finish Filling Out All Fields", 500,500);
-			typeToFont(g2d, "Please Finish Filling Out All Fields", 100,500,15,15,0,20, null);
+			//typeToFontNOBOX(g2d, "Please Finish Filling Out All Fields", 100,500,700,15,0,20);
+			drawScreen(g2d,new ImageIcon("White Filter.png"));
+			g2d.drawImage(new ImageIcon("Finish Filling Out Box.png").getImage(),centerXPosition(800),centerYPosition(800),800,800, this);
+			drawButton(g2d, XButton);
+		}
+
+		if(taskAdded){
+			//typeToFontNOBOX(g2d, "Please Finish Filling Out All Fields", 100,500,700,15,0,20);
+			drawScreen(g2d,new ImageIcon("White Filter.png"));
+			g2d.drawImage(new ImageIcon("Task Added Notification.png").getImage(),centerXPosition(800),centerYPosition(800)-15,800,800, this);
+			drawButton(g2d, XButton);
 		}
 
 		//Astronaut
@@ -227,7 +241,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		//System.out.println(currentInputBox);
 		//System.out.println(currentInput);
-		System.out.println(tasks);
+		//System.out.println(tasks);
 		//Management
 		twoDgraph.drawImage(back, null, 0, 0);
 }
@@ -341,6 +355,40 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	TODO Display
 	 */
+
+	 private void typeToFontNOBOX(Graphics g2d, String inputString, int xValue, int yValue, int width, int height, int deleteStopI, int fontSize) {
+		int xAddedValue = 0;
+		int yAddedValue = 0;
+		int yMaxI = yValue + height;
+		int margin = xValue + width;
+		deleteStop = deleteStopI;
+		//Correctly pulling deleteStop and associating it with the corresponding string
+		
+		for(int i=0; i<inputString.length();i++) {
+			Letter newLetter = new Letter(inputString.charAt(i));
+			g2d.drawImage(newLetter.getAffiliatedImage().getImage(),xValue+xAddedValue,yValue+yAddedValue,fontSize,fontSize,this);
+
+			if(newLetter.getDimension() == 'M') {
+				xAddedValue += fontSize;
+			} else if(newLetter.getDimension() == 'S') {
+				xAddedValue += (fontSize * 4/5);
+			} else {
+				//xAddedValue += fontSize*2;
+				xAddedValue += fontSize + (fontSize * 3 / 10);
+			}
+
+			if(xValue + xAddedValue + (fontSize * 13/10) > margin) {
+				xAddedValue = 0;
+				yAddedValue += (fontSize +10);
+			}
+
+			if(newLetter.getAffiliatedCharacter() == '\n'){
+				xAddedValue = 0;
+				yAddedValue += (fontSize +10);
+			}
+
+		}
+	}
 	
 	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int width, int height, int deleteStopI, int fontSize, TextBox a) {
 		int xAddedValue = 0;
@@ -604,6 +652,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}else{
 				finishedInputtingTask.setImg(new ImageIcon("Checkmark2.png"));
 			}
+			if(finishEnteringTaskNotif || taskAdded){
+				if(XButton.hover(e.getX(),e.getY())){
+					XButton.setImg(new ImageIcon("X Button Highlighted.png"));
+				} else {
+					XButton.setImg(new ImageIcon("X Button.png"));
+				}
+			}
 		}
 		
 	}
@@ -664,7 +719,19 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		if(screenstatus.equals("Input")){
 			boolean tempb = false;
-		
+			
+
+			if(finishEnteringTaskNotif || taskAdded){
+				if(XButton.hover(e.getX(),e.getY())){
+					
+					if(finishEnteringTaskNotif){
+					finishEnteringTaskNotif = false;
+					} else if(taskAdded){
+						taskAdded = false;
+						screenstatus = "Start";
+					}
+				}
+			} else {
 			if(taskNameInput.hover(e.getX(), e.getY())) {
 				operateTextBox(taskNameInput);
 				tempb = true;
@@ -695,17 +762,42 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 
 			//finished inputting tasks button (WORK ON THIS)
+			
 			if(!(currentInput == null)){
 				if(finishedInputtingTask.hover(e.getX(), e.getY())){
-					screenstatus = "Play";
-					tasks.add(new Task(temporaryTaskReward, temporaryTaskName,temporaryTaskDate,temporaryTaskPositionInQueue));
+
+					temporaryTaskReward = taskRewardInput.getAffiliatedText();
+					temporaryTaskName = taskNameInput.getAffiliatedText();
+					temporaryTaskDate = taskDateInput.getAffiliatedText();
+					temporaryTaskPositionInQueue = taskPositionInput.getAffiliatedText();
+
+					iteratedReward = temporaryTaskReward.substring(8,temporaryTaskReward.length());
+					iteratedName = temporaryTaskName.substring(6,temporaryTaskName.length());
+					iteratedDate = temporaryTaskDate.substring(10,temporaryTaskDate.length());
+					iteratedPosition = temporaryTaskPositionInQueue.substring(9,temporaryTaskPositionInQueue.length());
+
+					if((!iteratedReward.equals("")) && !iteratedName.equals("")&& !iteratedDate.equals("") && !iteratedPosition.equals("")){
+						tasks.add(new Task(iteratedReward, iteratedName,iteratedDate,iteratedPosition));
+						System.out.println(tasks.get(0).getTaskName());
+						taskAdded = true;
+					} else {
+						finishEnteringTaskNotif = true;
+					}
 				}
-			} else if(currentInput == null){
+			} }/*else if(currentInput == null){
 				if(finishedInputtingTask.hover(e.getX(), e.getY())){
 					finishEnteringTaskNotif=true;
 					//notification to finish filling out all fields
 				}
-			}
+			}*/
+
+			/*
+			 * taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
+		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
+		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,9,false, "Reward: ");
+		taskPositionInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+490, 560,30, 10, false, "Position: ");
+	
+			 */
 		}
 		
 		/*boolean tempb = false;
