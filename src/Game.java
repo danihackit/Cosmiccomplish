@@ -468,7 +468,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			inputStat = true;
 		}
 		}
-		else{
+		
+		if(!(currentInputBox==null)) {
 			char character = e.getKeyChar();
 			
 			currentInput = currentInputBox.getAffiliatedText();
