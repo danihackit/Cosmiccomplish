@@ -155,7 +155,7 @@ public class Letter {
 		} else if(ACI == '>') {
 			returnValue = new ImageIcon("greater than.png");
 		} else if(ACI == '%') {
-			returnValue = new ImageIcon("%.png");
+			returnValue = new ImageIcon("percent.png");
 		} else if(ACI == '^') {
 			returnValue = new ImageIcon("^.png");
 		} else if(ACI == '"') {
