@@ -4,7 +4,7 @@ public class TextBox {
 
 	private int x,y, w, h;
 	private int deletionRestriction;
-	private boolean inputStatus;
+	private boolean inputStatus, deleteAllowed;
 	private String affiliatedText;
 	
 	public TextBox()
@@ -46,6 +46,10 @@ public class TextBox {
 	{
 		return h;
 	}
+
+	public boolean getDeleteAllowed(){
+		return deleteAllowed;
+	}
 	
 	public int getDeletionRestriction() {
 		return deletionRestriction;
@@ -69,6 +73,10 @@ public class TextBox {
 	
 	public void setInputStatus(boolean inputStatusI) {
 		inputStatus = inputStatusI;
+	}
+
+	public void setDeleteAllowed(boolean deleteAllowedI){
+		deleteAllowed = deleteAllowedI;
 	}
 	
 	public boolean hover(int mouseX, int mouseY) {

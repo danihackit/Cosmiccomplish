@@ -40,8 +40,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button storeButton;
 	private Button homeButton;
 	private Button taskButton;
+	private Button finishedInputtingTask;
 	
-	private TextBox taskNameInput, taskDateInput, taskRewardInput;
+	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 
 	private Task newtask;
 
@@ -71,6 +72,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean inputStat = false;
 	private boolean make;
 	private boolean typingPermitted = true;
+	private boolean finishEnteringTaskNotif = false;
 	
 	//Strings
 	private String screenstatus = "Start Up";
@@ -109,11 +111,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
 		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
 		taskButton = new Button(600,550,140,56, new ImageIcon("Task Button.png"));
+		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		
-		System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
-		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 6, false, "Task: ");
-		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 10, false, "Due Date: ");
-		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,8,false, "Reward: ");
+		//System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
+		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
+		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
+		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,9,false, "Reward: ");
+		taskPositionInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+490, 560,30, 10, false, "Position: ");
 	}
 
 	//Run Method
@@ -186,6 +190,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			InputScreen(g2d);
 		}
 		
+		//work on this 
+		if(finishEnteringTaskNotif){
+			g2d.drawString("Please Finish Filling Out All Fields", 500,500);
+			typeToFont(g2d, "Please Finish Filling Out All Fields", 100,500,15,15,0,20, null);
+		}
+
 		//Astronaut
 		if(astronautNeeded) {
 			g2d.drawImage(astronaut.getImg().getImage(), astronaut.getX(), astronaut.getY(), astronaut.getW(), astronaut.getH(), this);
@@ -213,8 +223,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		
+
+		
 		//System.out.println(currentInputBox);
-		System.out.println(currentInput);
+		//System.out.println(currentInput);
+		System.out.println(tasks);
 		//Management
 		twoDgraph.drawImage(back, null, 0, 0);
 }
@@ -313,6 +326,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		typeTextBoxToFont(g2d,taskNameInput,30);
 		typeTextBoxToFont(g2d,taskDateInput,30);
 		typeTextBoxToFont(g2d, taskRewardInput, 30);
+		typeTextBoxToFont(g2d, taskPositionInput, 30);
+
+		drawButton(g2d, finishedInputtingTask);
+		
+		
 	}
 	
 	
@@ -330,6 +348,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		int yMaxI = yValue + height;
 		int margin = xValue + width;
 		deleteStop = deleteStopI;
+		//Correctly pulling deleteStop and associating it with the corresponding string
+		
 		for(int i=0; i<inputString.length();i++) {
 			Letter newLetter = new Letter(inputString.charAt(i));
 			g2d.drawImage(newLetter.getAffiliatedImage().getImage(),xValue+xAddedValue,yValue+yAddedValue,fontSize,fontSize,this);
@@ -359,11 +379,18 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} else {
 				a.setInputStatus(true);
 			}
+
+			if(inputString.length()<=deleteStopI){
+				a.setDeleteAllowed(false);
+			} else {
+				a.setDeleteAllowed(true);
+			}
 		}
 	}
 	 
 	 private void typeTextBoxToFont(Graphics g2d, TextBox a, int fontSize) {
 			typeToFont(g2d, a.getAffiliatedText(),a.getX(), a.getY(), a.getW(), a.getH(), a.getDeletionRestriction(),fontSize, a);
+			//Correctly pulling deletion restriction
 	 }
 		
 	
@@ -455,16 +482,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 					}
 				}
 				currentInput = currentInput + character;
-			}  else if(key == 8 && currentInput.length()>deleteStop){
+			}  else if(key == 8 && currentInputBox.getDeleteAllowed()){
 				if(currentInput.length()==1) {
 					currentInput = "";
 				} else {
 					currentInput = currentInput.substring(0,currentInput.length()-2);
 				}
 				//key = 0;
-			} else if (currentInput.length()<=deleteStop){
-				currentInputBox.setInputStatus(false);
-				key=0;
 			}
 			
 			currentInputBox.setAffiliatedText(currentInput);
@@ -573,6 +597,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				taskButton.setImg(new ImageIcon("Task Button.png"));
 			}
 		}
+
+		if(screenstatus.equals("Input")){
+			if(finishedInputtingTask.hover(e.getX(), e.getY())){
+				finishedInputtingTask.setImg(new ImageIcon ("CheckmarkHover.png"));
+			}else{
+				finishedInputtingTask.setImg(new ImageIcon("Checkmark2.png"));
+			}
+		}
 		
 	}
 	
@@ -591,7 +623,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			currentInput = currentInput.substring(0,currentInput.length()-1);
 			a.setAffiliatedText(currentInput);
 		}
-		//okay doing this and commenting out a=null did nothing: a.setInputStatus(false);
 		a = null;
 	}
 	//Mouse Clicked Methods
@@ -631,32 +662,83 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		
+		if(screenstatus.equals("Input")){
+			boolean tempb = false;
 		
+			if(taskNameInput.hover(e.getX(), e.getY())) {
+				operateTextBox(taskNameInput);
+				tempb = true;
+			} else {
+				doNotOperateTextBox(taskNameInput);
+			}
+			if(taskDateInput.hover(e.getX(), e.getY())) {
+				operateTextBox(taskDateInput);
+				tempb = true;
+			} else {
+				doNotOperateTextBox(taskDateInput);
+			}
+			if(taskRewardInput.hover(e.getX(), e.getY())) {
+				operateTextBox(taskRewardInput);
+				tempb = true;
+			} else {
+				doNotOperateTextBox(taskRewardInput);
+			}
+			if(taskPositionInput.hover(e.getX(), e.getY())){
+				operateTextBox(taskPositionInput);
+				tempb=true;
+			} else{
+				doNotOperateTextBox(taskPositionInput);
+			}
+
+			if(!tempb){
+				currentInputBox = null;
+			}
+
+			//finished inputting tasks button (WORK ON THIS)
+			if(!(currentInput == null)){
+				if(finishedInputtingTask.hover(e.getX(), e.getY())){
+					screenstatus = "Play";
+					tasks.add(new Task(temporaryTaskReward, temporaryTaskName,temporaryTaskDate,temporaryTaskPositionInQueue));
+				}
+			} else if(currentInput == null){
+				if(finishedInputtingTask.hover(e.getX(), e.getY())){
+					finishEnteringTaskNotif=true;
+					//notification to finish filling out all fields
+				}
+			}
+		}
+		
+		/*boolean tempb = false;
 		
 		if(taskNameInput.hover(e.getX(), e.getY())) {
 			operateTextBox(taskNameInput);
-		} else if (!currentInput.equals(null)){
-			doNotOperateTextBox(taskNameInput);
-		} else if (!taskNameInput.hover(e.getX(), e.getY())){
+			tempb = true;
+		} else {
 			doNotOperateTextBox(taskNameInput);
 		}
-
 		if(taskDateInput.hover(e.getX(), e.getY())) {
 			operateTextBox(taskDateInput);
-		} else if (!currentInput.equals(null)){
-			doNotOperateTextBox(taskDateInput);
-		} else if (!taskDateInput.hover(e.getX(), e.getY())){
+			tempb = true;
+		} else {
 			doNotOperateTextBox(taskDateInput);
 		}
-
 		if(taskRewardInput.hover(e.getX(), e.getY())) {
 			operateTextBox(taskRewardInput);
-		} else if (!currentInput.equals(null)){
-			doNotOperateTextBox(taskRewardInput);
-		} else if (!taskRewardInput.hover(e.getX(), e.getY())){
+			tempb = true;
+		} else {
 			doNotOperateTextBox(taskRewardInput);
 		}
-		
+		if(taskPositionInput.hover(e.getX(), e.getY())){
+			operateTextBox(taskPositionInput);
+			tempb=true;
+		} else{
+			doNotOperateTextBox(taskPositionInput);
+		}
+
+		if(!tempb){
+			currentInputBox = null;
+		}
+		*/
 		
 	}
 
@@ -750,20 +832,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		public void testInput(){
 			Scanner scanner = new Scanner(System.in);
 
-			System.out.println("Task:");
+			//System.out.println("Task:");
 			String task = scanner.nextLine();
 
-			System.out.println("Due Date:");
+			//System.out.println("Due Date:");
 			String dueDate = scanner.nextLine();
 
-			System.out.println("Difficulty (1-10):");
+			//System.out.println("Difficulty (1-10):");
 			int difficulty = scanner.nextInt();
 
-			System.out.println("Position in Queue");
+			//System.out.println("Position in Queue");
 			int positionInQueue = scanner.nextInt();
 
 			//newtask = new Task(difficulty, task, dueDate, positionInQueue);
 			tasks.add(newtask);
-			System.out.println(tasks.get(0).getTaskName());
+			//System.out.println(tasks.get(0).getTaskName());
 		}
 }
