@@ -111,10 +111,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
-		storeButton = new Button (900,300,140,56, new ImageIcon ("StoreButton2.png"));
-		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
-		homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
-		taskButton = new Button(600,550,140,56, new ImageIcon("Task Button.png"));
+		storeButton = new Button(900, 300,140,56, new ImageIcon ("StoreButton2.png"));
+		homeButton = new Button (centerXPosition(140), centerYPosition(70), 140, 70, new ImageIcon("HomeButton2.png"));
+		//homeButton = new Button (600, 550, 140,70, new ImageIcon("HomeButton2.png"));
+		taskButton = new Button(centerXPosition(140),centerYPosition(56),140,56, new ImageIcon("Task Button.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
 		
@@ -318,7 +318,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	private void StoreScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
-		g2d.drawImage(new ImageIcon("Store Header.png").getImage(), 500,200,280,140,this);
+		//g2d.drawImage(new ImageIcon("Store Header.png").getImage(), 500,200,280,140,this);
 		g2d.setColor(Color.white);
 		g2d.drawString("Store", 500, 500);
 		drawButton(g2d, homeButton);
