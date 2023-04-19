@@ -42,6 +42,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button taskButton;
 	private Button finishedInputtingTask;
 	private Button XButton;
+	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 
@@ -117,7 +118,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		taskButton = new Button(centerXPosition(140),centerYPosition(56),140,56, new ImageIcon("Task Button.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
-		
+		forwardButton = new Button(150,550,335,70, new ImageIcon("Move Forward Button.png"));
+		backwardButton = new Button(forwardButton.getX()+forwardButton.getW()+30, 550, 335,70, new ImageIcon("MoveBackwardButton.png"));
+		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(50)-50, 100,100, new ImageIcon ("RightArrowButton.png"));
+		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
+
 		//System.out.println("Setting X to " + (centerXPosition(600) + 25) + " and Y to " + (centerYPosition(600)+100));
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
@@ -193,6 +198,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			StoreScreen(g2d);
 		} else if(screenstatus.equals("Input")){
 			InputScreen(g2d);
+		} else if(screenstatus.equals("Reorder Tasks")){
+			ReorderTasksScreen(g2d);
 		}
 		
 		//work on this 
@@ -346,6 +353,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		
 	}
+
+	private void ReorderTasksScreen(Graphics g2d){
+		g2d.setColor(Color.white);
+		drawScreen(g2d, new ImageIcon("ReorderingTasksBackground.png"));
+		drawButton(g2d, forwardButton);
+		drawButton(g2d, backwardButton);
+		drawButton(g2d, rightArrowButton);
+		drawButton(g2d, leftArrowButton);
+		
+	}
 	
 	
 	/*
@@ -482,7 +499,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		key= e.getKeyCode();
-		//System.out.println(key+ " - " + e.getKeyChar());
+		System.out.println(key+ " - " + e.getKeyChar());
 	
 		if(currentInputBox == null){
 		if(key == 65 || key == 37) { // A or <-
@@ -514,6 +531,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(key==73){ // I
 			screenstatus = ("Input");
 			inputStat = true;
+		}
+
+		if(key==82){ // r for reordering task screen
+			screenstatus = ("Reorder Tasks");
 		}
 		}
 		
@@ -660,6 +681,34 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 			}
 		}
+
+		if(screenstatus.equals("Reorder Tasks")){
+			if(forwardButton.hover(e.getX(), e.getY())){
+				forwardButton.setImg(new ImageIcon ("MoveForwardHover.png"));
+			} else{
+				forwardButton.setImg(new ImageIcon("Move Forward Button.png"));
+			}
+
+			if(backwardButton.hover(e.getX(), e.getY())){
+				backwardButton.setImg(new ImageIcon ("MoveBackwardHover.png"));
+			} else{
+				backwardButton.setImg(new ImageIcon ("MoveBackwardButton.png"));
+			}
+
+			if(rightArrowButton.hover(e.getX(), e.getY())){
+				rightArrowButton.setImg(new ImageIcon ("RightArrowHover.png"));
+			} else{
+				rightArrowButton.setImg(new ImageIcon ("RightArrowButton.png"));
+			}
+
+			if(leftArrowButton.hover(e.getX(), e.getY())){
+				leftArrowButton.setImg(new ImageIcon ("LeftArrowHover.png"));
+			} else{
+				leftArrowButton.setImg(new ImageIcon ("LeftArrowButton.png"));
+			}
+		}
+
+		
 		
 	}
 	
