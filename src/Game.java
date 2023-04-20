@@ -64,6 +64,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private int key;
 	private int mvmfactor;
 	private int deleteStop =0;
+	private int taskIteratePos = 0;
 	
 	//Other Numbers
 	private long starttime;
@@ -361,7 +362,24 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawButton(g2d, backwardButton);
 		drawButton(g2d, rightArrowButton);
 		drawButton(g2d, leftArrowButton);
-		
+
+		//typeToFontNOBOX(g2d, taskIteratePos + "", centerXPosition(60),centerYPosition(60)-30,60,60,0,59);
+
+		if(!tasks.isEmpty()){			
+			displayTaskElement(g2d, tasks.get(taskIteratePos).getTaskName(),175);
+			displayTaskElement(g2d, "Due Date: " + tasks.get(taskIteratePos).getDueDate(),275);
+			displayTaskElement(g2d, "Reward: " + tasks.get(taskIteratePos).getRewardValue(),375);
+			displayTaskElement(g2d, "" + (taskIteratePos + 1),465);
+
+		} else {
+			typeToFontNOBOX(g2d,"No Tasks to show!",225,175,500,50,0,20);
+		}
+
+
+		//typeTextBoxToFont(g2d,tasks.get(taskIteratePos).getTaskName(),30);
+		//typeTextBoxToFont(g2d,taskDateInput,30);
+		//typeTextBoxToFont(g2d, taskRewardInput, 30);
+		//typeTextBoxToFont(g2d, taskPositionInput, 30);
 	}
 	
 	
@@ -373,6 +391,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 
+	 private void displayTaskElement(Graphics g2d, String inputString, int yValue){
+		int tempFontSize = 30;
+
+		while(getWidthForText(inputString,tempFontSize)>750){
+			tempFontSize--;
+		}
+
+		typeToFontNOBOX(g2d,inputString,centerXPosition(getWidthForText(inputString,tempFontSize)),yValue,750,100,0,tempFontSize);
+
+	 }
 	 private void typeToFontNOBOX(Graphics g2d, String inputString, int xValue, int yValue, int width, int height, int deleteStopI, int fontSize) {
 		int xAddedValue = 0;
 		int yAddedValue = 0;
@@ -406,6 +434,26 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		}
 	}
+
+	private int getWidthForText(String inputString, int fontSize){
+		int xAddedValue = 0;		
+		
+		for(int i=0; i<inputString.length();i++) {
+			Letter newLetter = new Letter(inputString.charAt(i));
+
+			if(newLetter.getDimension() == 'M') {
+				xAddedValue += fontSize;
+			} else if(newLetter.getDimension() == 'S') {
+				xAddedValue += (fontSize * 4/5);
+			} else {
+				xAddedValue += fontSize + (fontSize * 3 / 10);
+			}
+
+
+		}
+
+		return xAddedValue;
+	}
 	
 	 private void typeToFont(Graphics g2d, String inputString, int xValue, int yValue, int width, int height, int deleteStopI, int fontSize, TextBox a) {
 		int xAddedValue = 0;
@@ -413,6 +461,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		int yMaxI = yValue + height;
 		int margin = xValue + width;
 		deleteStop = deleteStopI;
+		
 		//Correctly pulling deleteStop and associating it with the corresponding string
 		
 		for(int i=0; i<inputString.length();i++) {
@@ -499,7 +548,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent e) {
 		key= e.getKeyCode();
-		System.out.println(key+ " - " + e.getKeyChar());
+		//System.out.println(key+ " - " + e.getKeyChar());
 	
 		if(currentInputBox == null){
 		if(key == 65 || key == 37) { // A or <-
@@ -839,54 +888,29 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 					taskPositionInput.setAffiliatedText("Position: ");
 
 				}
-			} }/*else if(currentInput == null){
-				if(finishedInputtingTask.hover(e.getX(), e.getY())){
-					finishEnteringTaskNotif=true;
-					//notification to finish filling out all fields
-				}
-			}*/
+			} }}
 
-			/*
-			 * taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
-		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
-		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,9,false, "Reward: ");
-		taskPositionInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+490, 560,30, 10, false, "Position: ");
+		if(screenstatus.equals("Reorder Tasks")){
+			if(forwardButton.hover(e.getX(), e.getY())){
+				forwardButton.setImg(new ImageIcon ("MoveForwardHover.png"));
+			}
 	
-			 */
-		}
-		
-		/*boolean tempb = false;
-		
-		if(taskNameInput.hover(e.getX(), e.getY())) {
-			operateTextBox(taskNameInput);
-			tempb = true;
-		} else {
-			doNotOperateTextBox(taskNameInput);
-		}
-		if(taskDateInput.hover(e.getX(), e.getY())) {
-			operateTextBox(taskDateInput);
-			tempb = true;
-		} else {
-			doNotOperateTextBox(taskDateInput);
-		}
-		if(taskRewardInput.hover(e.getX(), e.getY())) {
-			operateTextBox(taskRewardInput);
-			tempb = true;
-		} else {
-			doNotOperateTextBox(taskRewardInput);
-		}
-		if(taskPositionInput.hover(e.getX(), e.getY())){
-			operateTextBox(taskPositionInput);
-			tempb=true;
-		} else{
-			doNotOperateTextBox(taskPositionInput);
-		}
-
-		if(!tempb){
-			currentInputBox = null;
-		}
-		*/
-		
+			if(backwardButton.hover(e.getX(), e.getY())){
+				backwardButton.setImg(new ImageIcon ("MoveBackwardHover.png"));
+			}
+	
+			if(rightArrowButton.hover(e.getX(), e.getY())){
+				if(taskIteratePos<tasks.size()-1){
+					taskIteratePos++;
+				}
+			}
+	
+			if(leftArrowButton.hover(e.getX(), e.getY())){
+				if(taskIteratePos>0){
+					taskIteratePos--;
+				}
+			}	
+		}	
 	}
 
 
