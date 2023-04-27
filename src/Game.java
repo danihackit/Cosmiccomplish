@@ -867,14 +867,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 						tasks.add(new Task(iteratedReward, iteratedName,iteratedDate,iteratedPosition));
 						System.out.println(tasks.get(0).getTaskName());
 						taskAdded = true;
+
+						taskNameInput.setAffiliatedText("Task: ");
+						taskDateInput.setAffiliatedText("Due Date: ");
+						taskRewardInput.setAffiliatedText("Reward: ");
+						taskPositionInput.setAffiliatedText("Position: ");
 					} else {
 						finishEnteringTaskNotif = true;
 					}
 
-					taskNameInput.setAffiliatedText("Task: ");
-					taskDateInput.setAffiliatedText("Due Date: ");
-					taskRewardInput.setAffiliatedText("Reward: ");
-					taskPositionInput.setAffiliatedText("Position: ");
+					
 
 				}
 			} }}
