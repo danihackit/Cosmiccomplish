@@ -3,7 +3,7 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 public class CharacterObject {
-	private int x,y,w,h;
+	private double x,y,w,h;
 	private int xm,ym;
 	private ImageIcon characterImage;
 	
@@ -42,16 +42,16 @@ public class CharacterObject {
 	//Getters and Setters
 	
 	//Getters
-	public int getX() {
+	public double getX() {
 		return x;
 	}
-	public int getY() {
+	public double getY() {
 		return y;
 	}
-	public int getW() {
+	public double getW() {
 		return w;
 	}
-	public int getH() {
+	public double getH() {
 		return h;
 	}
 	public int getXm() {
@@ -65,16 +65,16 @@ public class CharacterObject {
 	}
 	
 	//Setters
-	public void setX(int xv) {
+	public void setX(double xv) {
 		x = xv;
 	}
-	public void setY(int yv) {
+	public void setY(double yv) {
 		y = yv;
 	}
-	public void setW(int wv) {
+	public void setW(double wv) {
 		w = wv;
 	}
-	public void setH(int hv) {
+	public void setH(double hv) {
 		h = hv;
 	}
 	public void setXm(int xmv) {
@@ -98,8 +98,8 @@ public class CharacterObject {
 		x += xmv;
 	}
 	public boolean collision(CharacterObject s) {
-		Rectangle sp = new Rectangle(s.getX(), s.getY(), s.getW(), s.getH());
-		Rectangle p = new Rectangle(getX(), getY(), getW(), getH());
+		Rectangle sp = new Rectangle((int)s.getX(),(int) s.getY(), (int)s.getW(), (int)s.getH());
+		Rectangle p = new Rectangle((int)getX(), (int)getY(), (int)getW(), (int)getH());
 		
 		if(p.intersects(sp)) {
 			return true;
