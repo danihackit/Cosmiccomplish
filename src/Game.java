@@ -47,6 +47,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private int key;
 	private int mvmfactor;
 	private int taskIteratePos = 0;
+	private double testX = centerXPosition(40);
+	private double testY = centerYPosition(40);
+	private double diameter = 200;
+	private double angle = 0.0;
+	private double ratio;
 	private int deleteStop;
 	
 	//Other Numbers
@@ -63,6 +68,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean inputStat;
 	
 	//Strings
+	//private String screenstatus = "Start Up";
 	private String screenstatus = "Start Up";
 	private String temporaryTaskName = new String("");
 	private String temporaryTaskDate = new String("");
@@ -122,7 +128,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	   	{
 	   		while(true)
 	   		{
-	   		   Thread.currentThread().sleep(5);
+	   		   //Thread.currentThread().sleep(5);
+			   Thread.currentThread().sleep(5);
 	            repaint();
 	         }
 	      }
@@ -171,13 +178,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		textTimer();
 
 		//Pop-Up Notifications
-		if(finishEnteringTaskNotif){
+		if(finishEnteringTaskNotif && screenstatus.equals("Input")){
 			drawScreen(g2d,new ImageIcon("White Filter.png"));
 			g2d.drawImage(new ImageIcon("Finish Filling Out Box.png").getImage(),centerXPosition(800),centerYPosition(800),800,800, this);
 			drawButton(g2d, XButton);
 		}
 
-		if(taskAdded){
+		if(taskAdded && screenstatus.equals("Input")){
 			drawScreen(g2d,new ImageIcon("White Filter.png"));
 			g2d.drawImage(new ImageIcon("Task Added Notification.png").getImage(),centerXPosition(800),centerYPosition(800)-15,800,800, this);
 			drawButton(g2d, XButton);
@@ -185,7 +192,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		//Astronaut
 		if(astronautNeeded) {
-			g2d.drawImage(astronaut.getImg().getImage(), astronaut.getX(), astronaut.getY(), astronaut.getW(), astronaut.getH(), this);
+			g2d.drawImage(astronaut.getImg().getImage(), (int)astronaut.getX(), (int)astronaut.getY(), (int)astronaut.getW(), (int)astronaut.getH(), this);
 		
 			if(recentright) {
 				if(moving) {
@@ -209,6 +216,26 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 			}
 		}
+
+
+
+
+
+		if(screenstatus.equals("Testing Room")){
+			
+			circularMotion(g2d,astronaut,100,true);
+			
+		}
+
+
+
+
+
+
+
+
+
+
 		twoDgraph.drawImage(back, null, 0, 0);
 }
 	
@@ -321,7 +348,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			displayTaskElement(g2d, "" + (taskIteratePos + 1),465);
 
 		} else {
-			typeToFontNOBOX(g2d,"No Tasks to show!",225,175,500,50,0,20);
+			typeToFontNOBOX(g2d,"No Tasks to show!",centerXPosition(getWidthForText("No Tasks to show!",20)),centerYPosition(20)-40,500,50,0,20);
 		}
 	}
 	
@@ -438,6 +465,32 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 private void typeTextBoxToFont(Graphics g2d, TextBox a, int fontSize) {
 			typeToFont(g2d, a.getAffiliatedText(),a.getX(), a.getY(), a.getW(), a.getH(), a.getDeletionRestriction(),fontSize, a);
 	 }
+
+
+	private void circularMotion(Graphics g2d, CharacterObject object, int radius, boolean spiral){
+		
+		g2d.drawImage(object.getImg().getImage(), (int)testX, (int)testY, (int)object.getW(), (int)object.getH(), this);
+		if(angle<360){
+			angle +=0.0174532925;
+		} else {
+			angle = 0.0;
+		}
+
+		testX = Math.cos(angle)*diameter + centerXPosition(40);
+		testY = Math.sin(angle)*diameter + centerYPosition(40);
+
+		if(!spiral){
+		diameter = radius*2;
+
+		} else {
+			if(diameter>0){
+				diameter-=0.1;
+			}
+			object.setW((object.getW()/1.002));
+			object.setH((object.getH()/1.002));
+		}
+		
+	}
 		
 	
 	/*
@@ -532,6 +585,30 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		if(key==82){ // R
 			screenstatus = ("Reorder Tasks");
+		}
+
+		if(key==39){ // ->
+			if(taskIteratePos<tasks.size()-1){
+				taskIteratePos++;
+			}
+		}
+
+		if(key==37){
+			if(taskIteratePos>0){
+				taskIteratePos--;
+			}
+		}
+
+		if(key==70){
+			screenstatus = "Testing Room";
+			testX = centerXPosition(40);
+			testY = centerYPosition(40);
+			diameter = 200;
+			angle = 0.0;
+
+			astronaut.setW((int)(121/2));
+			astronaut.setH((int)(176/2));
+
 		}
 		}
 		
@@ -902,5 +979,5 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		public void refreshFromFile() {
 			
 		}
-
+		
 }
