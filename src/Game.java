@@ -101,7 +101,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		storeButton = new Button(900, 300,140,56, new ImageIcon ("StoreButton2.png"));
 		homeButton = new Button (centerXPosition(140), centerYPosition(70), 140, 70, new ImageIcon("HomeButton2.png"));
-		taskButton = new Button(centerXPosition(140),centerYPosition(56)+200,140,56, new ImageIcon("Task Button.png"));
+		taskButton = new Button(centerXPosition(140),centerYPosition(56),140,56, new ImageIcon("Task Button.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
 		forwardButton = new Button(150,550,335,70, new ImageIcon("Move Forward Button.png"));
