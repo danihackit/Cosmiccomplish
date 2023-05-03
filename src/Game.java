@@ -223,6 +223,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		if(screenstatus.equals("Testing Room")){
 			
+			drawScreen(g2d, new ImageIcon("void.png"));
 			circularMotion(g2d,astronaut,100,true);
 			
 		}
