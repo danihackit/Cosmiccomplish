@@ -66,6 +66,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Other Numbers
 	private long starttime;
 	private long initialTime;
+	private long begintime = 0;
 	
 	//Boolean
 	private boolean moving;
@@ -76,6 +77,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean finishEnteringTaskNotif = false;
 	private boolean taskAdded = false;
 	private boolean inputStat;
+	private boolean stupidvscode;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -127,8 +129,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
 		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
 
-		finishedTimerInput = new Button(0, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
-		invisibleButton2 = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
+		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
+		invisibleButton2 = new Button(659, 584, 109, 70, new ImageIcon("nan.png"));
 
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
@@ -194,6 +196,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			ReorderTasksScreen(g2d);
 		} else if(screenstatus.equals("Timer")){
 			TimerScreen(g2d);
+		} else if(screenstatus.equals("Countdown")){
+			CountdownScreen(g2d);
 		}
 		
 		textTimer();
@@ -364,13 +368,32 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 
 	private void TimerScreen(Graphics g2d){
-		setMinutes = 59;
-		setSeconds =59;
+		
+		drawScreen(g2d, new ImageIcon("Timer Input Background.png"));
+		drawScreen(g2d, new ImageIcon("Hours and Minutes Boxes.png"));
+
+		typeTextBoxToFont(g2d,hoursInput,150);
+		typeTextBoxToFont(g2d,minutesInput,150);
+		drawButton(g2d, finishedTimerInput);
+
+		if(begintime !=0){
+			if(System.currentTimeMillis()-begintime>=1600){
+				screenstatus = "Countdown";
+				initialTime= System.currentTimeMillis();
+
+				begintime = 0;
+			}
+		}
+
+
+	}
+
+	private void CountdownScreen(Graphics g2d){
+		setSeconds = 59;
 
 		seconds = Integer.valueOf(String.valueOf((System.currentTimeMillis() - initialTime)/1000));
 		
 		if(seconds>=setSeconds +1) {
-			System.out.println(seconds);
 			seconds = 1;
 			initialTime= System.currentTimeMillis();
 			minutes++;
@@ -393,14 +416,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			output = String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
 
 		}
-		drawScreen(g2d, new ImageIcon("Timer Input Background.png"));
-		drawScreen(g2d, new ImageIcon("Hours and Minutes Boxes.png"));
-		drawScreen(g2d, new ImageIcon("Timer Input GIF.gif"));
 
-		typeTextBoxToFont(g2d,hoursInput,150);
-		typeTextBoxToFont(g2d,minutesInput,150);
-
-		//typeToFontNOBOX(g2d, output, 200,200,300,50,0,40);
+		typeToFontNOBOX(g2d, output, 200,200,300,50,0,40);
 
 	}
 	
@@ -827,6 +844,17 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 
+		if(screenstatus.equals("Timer")){
+
+			if(!stupidvscode){
+				if(invisibleButton2.hover(e.getX(), e.getY())){
+					finishedTimerInput.setImg(new ImageIcon ("Still Frame Timer Input Button Hover.png"));
+				} else{
+					finishedTimerInput.setImg(new ImageIcon("Still Frame Timer Input Button.png"));
+				}
+			}
+		}
+
 		
 		
 	}
@@ -998,6 +1026,34 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				tempb = true;
 			} else {
 				doNotOperateTextBox(minutesInput);
+			}
+
+			if(screenstatus.equals("Timer")){
+				if(invisibleButton2.hover(e.getX(), e.getY())){
+
+					if(!minutesInput.getAffiliatedText().isEmpty()){
+
+						if(!hoursInput.getAffiliatedText().isEmpty()){
+							setHours = Integer.valueOf(hoursInput.getAffiliatedText());
+						} else {
+							setHours = 0;
+						}
+
+						setMinutes = Integer.valueOf(minutesInput.getAffiliatedText())-1;
+						
+						begintime = System.currentTimeMillis();
+						finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
+						
+
+						stupidvscode = true;
+
+						//System.out.println(setHours + ":" + setMinutes);
+
+						
+					} else {
+						stupidvscode = false;
+					}
+				} 
 			}
 
 			if(!tempb){
