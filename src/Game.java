@@ -36,6 +36,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button XButton;
 	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton;
 	private Button viewTasksButton;
+	private Button finishedTimerInput, invisibleButton2;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 	private TextBox currentInputBox;
@@ -126,6 +127,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
 		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
 
+		finishedTimerInput = new Button(0, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
+		invisibleButton2 = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
+
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
 		taskRewardInput = new TextBox(centerXPosition(600)+ 30, centerYPosition(600)+360, 560,60,9,false, "Reward: ");
@@ -133,6 +137,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		hoursInput = new TextBox(426, 240, 125,170, 0, false, "");
 		minutesInput = new TextBox(720, 240, 450,150, 0, false, "");
+
 	}
 
 	//Run Method
@@ -390,6 +395,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		drawScreen(g2d, new ImageIcon("Timer Input Background.png"));
 		drawScreen(g2d, new ImageIcon("Hours and Minutes Boxes.png"));
+		drawScreen(g2d, new ImageIcon("Timer Input GIF.gif"));
 
 		typeTextBoxToFont(g2d,hoursInput,150);
 		typeTextBoxToFont(g2d,minutesInput,150);
