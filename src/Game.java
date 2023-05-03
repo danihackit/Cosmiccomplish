@@ -35,6 +35,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button finishedInputtingTask;
 	private Button XButton;
 	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton;
+	private Button viewTasksButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 	private TextBox currentInputBox;
@@ -123,6 +124,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		backwardButton = new Button(forwardButton.getX()+forwardButton.getW()+30, 550, 335,70, new ImageIcon("MoveBackwardButton.png"));
 		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(50)-50, 100,100, new ImageIcon ("RightArrowButton.png"));
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
+		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
 
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
@@ -301,6 +303,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private void PlayScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
 		drawButton(g2d, taskButton);
+
+		if(!tasks.isEmpty()){
+			drawButton(g2d, viewTasksButton);
+		}
 	}
 	
 	private void AboutScreen(Graphics g2d) {
@@ -755,6 +761,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}else{
 				taskButton.setImg(new ImageIcon("Task Button.png"));
 			}
+
+			if(viewTasksButton.hover(e.getX(), e.getY())){
+				viewTasksButton.setImg(new ImageIcon ("ViewTaskHover.png"));
+			}else{
+				viewTasksButton.setImg(new ImageIcon ("ViewTaskButton.png"));
+			}
 		}
 
 		if(screenstatus.equals("Input")){
@@ -847,8 +859,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Play")) {
 			if(taskButton.hover(e.getX(), e.getY())){
 				screenstatus = "Input";
+			}else if(!tasks.isEmpty()){
+				if(viewTasksButton.hover(e.getX(), e.getY())){
+					screenstatus = "Reorder Tasks";
+				}
 			}
 		}
+		
 		
 		if(screenstatus.equals("Input")){
 			boolean tempb = false;
