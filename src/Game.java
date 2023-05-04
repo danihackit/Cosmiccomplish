@@ -25,6 +25,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
+	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon("Default Spaceship.png"));
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -244,7 +246,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Testing Room")){
 			
 			drawScreen(g2d, new ImageIcon("void.png"));
-			circularMotion(g2d,astronaut,100,true);
+			//circularMotion(g2d,astronaut,100,true);
+
+			ImageIcon test1 = new ImageIcon("Astronaut Facing Left Lifting None.png");
+			BufferedImage test = new BufferedImage(
+				test1.getIconWidth(),
+				test1.getIconHeight(),
+				BufferedImage.TYPE_INT_RGB
+			);
+			astronaut.setImg(new ImageIcon(rotate(test,20.0)));
 		}
 
 		twoDgraph.drawImage(back, null, 0, 0);
@@ -264,6 +274,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	private void drawButton(Graphics g2d, Button button) {
 		g2d.drawImage(button.getImg().getImage(), button.getX(), button.getY(), button.getW(), button.getH(), this);
+	}
+
+	private void drawObject(Graphics g2d, CharacterObject a){
+		g2d.drawImage(a.getImg().getImage(), (int)a.getX(), (int)a.getY(), (int)a.getW(), (int)a.getH(), this);
+
 	}
 
 	public int centerXPosition(int objectWidth){
@@ -417,7 +432,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		}
 
-		typeToFontNOBOX(g2d, output, 200,200,300,50,0,40);
+		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
+
+		drawObject(g2d, myPlanet);
+		drawObject(g2d, miniSpaceship);
+
+		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
 
 	}
 	
@@ -567,6 +587,22 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		
 	}
+
+	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
+		double sin = Math.abs(Math.sin(Math.toRadians(angle))),
+			   cos = Math.abs(Math.cos(Math.toRadians(angle)));
+		int w = bimg.getWidth();
+		int h = bimg.getHeight();
+		int neww = (int) Math.floor(w*cos + h*sin),
+			newh = (int) Math.floor(h*cos + w*sin);
+		BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+		Graphics2D graphic = rotated.createGraphics();
+		graphic.translate((neww-w)/2, (newh-h)/2);
+		graphic.rotate(Math.toRadians(angle), w/2, h/2);
+		graphic.drawRenderedImage(bimg, null);
+		graphic.dispose();
+		return rotated;
+	}
 		
 	
 	/*
@@ -608,6 +644,59 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+	public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
+        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = bufferedImage.createGraphics();
+        icon.paintIcon(null, graphics, 0, 0);
+        graphics.dispose();//from   w  ww.j a  va  2  s.  co m
+        return bufferedImage;
+    }
+
+	public static ImageIcon bufferedImageToImageIcon(BufferedImage bimg){
+		ImageIcon icon = new ImageIcon(bimg);
+		return icon;
+	}
+
+
+
+
+
+	public static ImageIcon rotatedImageIcon(ImageIcon icon, double angle){
+			BufferedImage test = imageIconToBufferedImage(icon);
+
+			ImageIcon returnImage  = new ImageIcon(rotate(test,20.0));
+
+			return returnImage;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	/*
  	 _     ____  _         _     _   __  _____  ____  _      ____  ___       _      ____ _____  _     ___   ___   __  
@@ -676,14 +765,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 		if(key==70){
-			screenstatus = "Testing Room";
+			/*screenstatus = "Testing Room";
 			testX = centerXPosition(40);
 			testY = centerYPosition(40);
 			diameter = 200;
 			angle = 0.0;
 
 			astronaut.setW((int)(121/2));
-			astronaut.setH((int)(176/2));
+			astronaut.setH((int)(176/2));*/
+
+			myPlanet.setImg(rotatedImageIcon(myPlanet.getImg(), 20.0));
 
 		}
 
