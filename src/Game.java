@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.event.*; 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 
 public class Game  extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 
@@ -26,7 +28,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
 	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
-	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), 90.0)));
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)90)));
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -36,7 +38,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button taskButton;
 	private Button finishedInputtingTask;
 	private Button XButton;
-	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton;
+	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton, selectButton;
 	private Button viewTasksButton;
 	private Button finishedTimerInput, invisibleButton2;
 	
@@ -64,11 +66,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private double angle = 0.0;
 	private double ratio;
 	private int deleteStop;
+	private int threadRunTime;
 	
 	//Other Numbers
 	private long starttime;
 	private long initialTime;
 	private long begintime = 0;
+	private long threadRunTimeHelper;
+	private long threadRunTimeHelper2 =0;
 	
 	//Boolean
 	private boolean moving;
@@ -129,6 +134,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		backwardButton = new Button(forwardButton.getX()+forwardButton.getW()+30, 550, 335,70, new ImageIcon("MoveBackwardButton.png"));
 		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(50)-50, 100,100, new ImageIcon ("RightArrowButton.png"));
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
+		selectButton = new Button (centerXPosition(560), centerYPosition(70), 560,70, new ImageIcon("SelectButton.png"));
 		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
 
 		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
@@ -254,7 +260,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				test1.getIconHeight(),
 				BufferedImage.TYPE_INT_RGB
 			);
-			astronaut.setImg(new ImageIcon(rotate(test,20.0)));
+			//astronaut.setImg(new ImageIcon(rotate(test,20.0)));
 		}
 
 		twoDgraph.drawImage(back, null, 0, 0);
@@ -370,6 +376,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawButton(g2d, backwardButton);
 		drawButton(g2d, rightArrowButton);
 		drawButton(g2d, leftArrowButton);
+		drawButton(g2d, selectButton);
 
 		if(!tasks.isEmpty()){			
 			displayTaskElement(g2d, tasks.get(taskIteratePos).getTaskName(),175);
@@ -434,12 +441,21 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 
+		
+		if(threadRunTimeHelper != 0){
+			threadRunTime = (int)(System.currentTimeMillis()-threadRunTimeHelper);
+			threadRunTimeHelper = System.currentTimeMillis();
+		} else {
+			threadRunTimeHelper = System.currentTimeMillis();
+		}
+
 		drawObject(g2d, myPlanet);
 		long milliseconds = setSeconds*1000 + setMinutes*60000 + setHours*36000000;
-		
-		circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,1.0);
-		miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()), 1.0)));
 
+		if(threadRunTime != 0){
+			circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
+			miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()), (threadRunTime*360.00000/milliseconds))));
+		}
 		//g2d.drawImage(new ImageIcon("Ship Trail.png").getImage(), (int)miniSpaceship.getX(), (int)(miniSpaceship.getY() + miniSpaceship.getH()), 50,100, this);
 
 		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
@@ -594,23 +610,22 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 	}
 
-	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
-		//double sin = Math.abs(Math.sin(Math.toRadians(angle))),
-			  // cos = Math.abs(Math.cos(Math.toRadians(angle)));
+	public static BufferedImage rotate(BufferedImage bimg, double angle) {
 		int w = bimg.getWidth();
 		int h = bimg.getHeight();
-		//int neww = (int) Math.floor(w*cos + h*sin),
-			//newh = (int) Math.floor(h*cos + w*sin);
-		//BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
 		BufferedImage rotated = new BufferedImage(w, h, bimg.getType());
 		Graphics2D graphic = rotated.createGraphics();
-		//graphic.translate((neww-w)/2, (newh-h)/2);
-		graphic.rotate(Math.toRadians(angle), w/2, h/2);
+		// Enable anti-aliasing
+		graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		 // Use higher quality rendering
+		graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		graphic.rotate(Math.toRadians(angle), w / 2, h / 2);
 		graphic.drawRenderedImage(bimg, null);
 		graphic.dispose();
-		//System.out.println(rotated.getWidth()  +  " and  " +  rotated.getHeight());
 		return rotated;
 	}
+		
+		
 		
 	
 	/*
@@ -669,13 +684,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		return icon;
 	}
 
-	public static ImageIcon rotatedImageIcon(ImageIcon icon, double angle){
-			BufferedImage test = imageIconToBufferedImage(icon);
-
-			ImageIcon returnImage  = new ImageIcon(rotate(test,20.0));
-
-			return returnImage;
-	}
+	
 
 
 
@@ -757,7 +766,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			astronaut.setW((int)(121/2));
 			astronaut.setH((int)(176/2));*/
 
-			miniSpaceship.setImg(rotatedImageIcon(miniSpaceship.getImg(), 20.0));
+			//miniSpaceship.setImg(rotatedImageIcon(miniSpaceship.getImg(), 20.0));
 
 		}
 
@@ -1067,6 +1076,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Reorder Tasks")){
 			if(forwardButton.hover(e.getX(), e.getY())){
 				forwardButton.setImg(new ImageIcon ("MoveForwardHover.png"));
+				screenstatus = "Timer";
 			}
 	
 			if(backwardButton.hover(e.getX(), e.getY())){
