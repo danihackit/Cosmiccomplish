@@ -26,7 +26,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
 	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
-	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon("Default Spaceship.png"));
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")),  90.0)));
+	
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -435,7 +436,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 
 		drawObject(g2d, myPlanet);
-		drawObject(g2d, miniSpaceship);
+		//drawObject(g2d, miniSpaceship);
+		
+		circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false);
+		miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()),  1.0)));
 
 		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
 
@@ -565,15 +569,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 	private void circularMotion(Graphics g2d, CharacterObject object, int radius, boolean spiral){
 		
+		angle-= 90;
+		System.out.println( angle );
+		
+		
 		g2d.drawImage(object.getImg().getImage(), (int)testX, (int)testY, (int)object.getW(), (int)object.getH(), this);
 		if(angle<360){
-			angle +=0.0174532925;
+			angle += 0.0025;
 		} else {
 			angle = 0.0;
 		}
+		
 
-		testX = Math.cos(angle)*diameter + centerXPosition(40);
-		testY = Math.sin(angle)*diameter + centerYPosition(40);
+		testX = Math.cos(Math.toRadians(angle))*diameter + centerXPosition(200)+35;
+		testY = Math.sin(Math.toRadians(angle))*diameter + centerYPosition(200)+25;
 
 		if(!spiral){
 		diameter = radius*2;
@@ -589,18 +598,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 
 	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
-		double sin = Math.abs(Math.sin(Math.toRadians(angle))),
-			   cos = Math.abs(Math.cos(Math.toRadians(angle)));
+		//double sin = Math.abs(Math.sin(Math.toRadians(angle))),
+			  // cos = Math.abs(Math.cos(Math.toRadians(angle)));
 		int w = bimg.getWidth();
 		int h = bimg.getHeight();
-		int neww = (int) Math.floor(w*cos + h*sin),
-			newh = (int) Math.floor(h*cos + w*sin);
-		BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+		//int neww = (int) Math.floor(w*cos + h*sin),
+			//newh = (int) Math.floor(h*cos + w*sin);
+		//BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+		BufferedImage rotated = new BufferedImage(w, h, bimg.getType());
 		Graphics2D graphic = rotated.createGraphics();
-		graphic.translate((neww-w)/2, (newh-h)/2);
+		//graphic.translate((neww-w)/2, (newh-h)/2);
 		graphic.rotate(Math.toRadians(angle), w/2, h/2);
 		graphic.drawRenderedImage(bimg, null);
 		graphic.dispose();
+		//System.out.println(rotated.getWidth()  +  " and  " +  rotated.getHeight());
 		return rotated;
 	}
 		
@@ -774,7 +785,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			astronaut.setW((int)(121/2));
 			astronaut.setH((int)(176/2));*/
 
-			myPlanet.setImg(rotatedImageIcon(myPlanet.getImg(), 20.0));
+			miniSpaceship.setImg(rotatedImageIcon(miniSpaceship.getImg(), 20.0));
 
 		}
 
