@@ -26,8 +26,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
 	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
-	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")),  90.0)));
-	
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon("Default Spaceship.png"));
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -708,6 +707,59 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 
 
+
+
+
+
+
+
+
+
+
+
+	public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
+        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = bufferedImage.createGraphics();
+        icon.paintIcon(null, graphics, 0, 0);
+        graphics.dispose();//from   w  ww.j a  va  2  s.  co m
+        return bufferedImage;
+    }
+
+	public static ImageIcon bufferedImageToImageIcon(BufferedImage bimg){
+		ImageIcon icon = new ImageIcon(bimg);
+		return icon;
+	}
+
+
+
+
+
+	public static ImageIcon rotatedImageIcon(ImageIcon icon, double angle){
+			BufferedImage test = imageIconToBufferedImage(icon);
+
+			ImageIcon returnImage  = new ImageIcon(rotate(test,20.0));
+
+			return returnImage;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	/*
  	 _     ____  _         _     _   __  _____  ____  _      ____  ___       _      ____ _____  _     ___   ___   __  
@@ -776,6 +828,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 		if(key==70){
+			/*screenstatus = "Testing Room";
 			/*screenstatus = "Testing Room";
 			testX = centerXPosition(40);
 			testY = centerYPosition(40);
