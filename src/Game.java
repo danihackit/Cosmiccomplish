@@ -26,7 +26,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
 	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
-	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon("Default Spaceship.png"));
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), 90.0)));
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -413,7 +413,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			initialTime= System.currentTimeMillis();
 			minutes++;
 		}
-		if(minutes >= setMinutes) {
+		if(minutes >= setMinutes && setSeconds-seconds == 0) {
 			System.out.println("DONE!");
 		}
 
@@ -435,10 +435,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 
 		drawObject(g2d, myPlanet);
-		//drawObject(g2d, miniSpaceship);
+		long milliseconds = setSeconds*1000 + setMinutes*60000 + setHours*36000000;
 		
-		circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false);
-		miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()),  1.0)));
+		circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,1.0);
+		miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()), 1.0)));
+
+		//g2d.drawImage(new ImageIcon("Ship Trail.png").getImage(), (int)miniSpaceship.getX(), (int)(miniSpaceship.getY() + miniSpaceship.getH()), 50,100, this);
 
 		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
 
@@ -566,22 +568,18 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 }
 
 
-	private void circularMotion(Graphics g2d, CharacterObject object, int radius, boolean spiral){
-		
-		angle-= 90;
-		System.out.println( angle );
-		
+	private void circularMotion(Graphics g2d, CharacterObject object, int radius, boolean spiral, double speed){		
 		
 		g2d.drawImage(object.getImg().getImage(), (int)testX, (int)testY, (int)object.getW(), (int)object.getH(), this);
 		if(angle<360){
-			angle += 0.0025;
+			angle += speed;
 		} else {
 			angle = 0.0;
 		}
 		
 
-		testX = Math.cos(Math.toRadians(angle))*diameter + centerXPosition(200)+35;
-		testY = Math.sin(Math.toRadians(angle))*diameter + centerYPosition(200)+25;
+		testX = Math.cos(Math.toRadians(angle-90))*diameter + centerXPosition(200)+35;
+		testY = Math.sin(Math.toRadians(angle-90))*diameter + centerYPosition(200)+25;
 
 		if(!spiral){
 		diameter = radius*2;
