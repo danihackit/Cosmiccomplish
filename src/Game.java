@@ -654,14 +654,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 	}
-
-
-
-
-
-
-
-
+	
 
 
 	public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
@@ -678,10 +671,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		return icon;
 	}
 
-
-
-
-
 	public static ImageIcon rotatedImageIcon(ImageIcon icon, double angle){
 			BufferedImage test = imageIconToBufferedImage(icon);
 
@@ -689,74 +678,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			return returnImage;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
-        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics graphics = bufferedImage.createGraphics();
-        icon.paintIcon(null, graphics, 0, 0);
-        graphics.dispose();//from   w  ww.j a  va  2  s.  co m
-        return bufferedImage;
-    }
-
-	public static ImageIcon bufferedImageToImageIcon(BufferedImage bimg){
-		ImageIcon icon = new ImageIcon(bimg);
-		return icon;
-	}
-
-
-
-
-
-	public static ImageIcon rotatedImageIcon(ImageIcon icon, double angle){
-			BufferedImage test = imageIconToBufferedImage(icon);
-
-			ImageIcon returnImage  = new ImageIcon(rotate(test,20.0));
-
-			return returnImage;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
