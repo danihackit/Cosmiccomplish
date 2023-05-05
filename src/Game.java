@@ -28,7 +28,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Objects
 	private CharacterObject astronaut = new CharacterObject(300, 300, (int)(121/2), (int)(176/2), new ImageIcon("Astronaut Facing Right Lifting None.png"));
 	private CharacterObject myPlanet = new CharacterObject(centerXPosition(200), centerYPosition(200)-20, (int)(200), (int)(200), new ImageIcon("Default Planet.png"));
-	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)90)));
+	private CharacterObject miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)90)),new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)90)));
 	private Button startButton;
 	private Button invisibleButton;
 	
@@ -64,6 +64,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private double testY = centerYPosition(40);
 	private double diameter = 200;
 	private double angle = 0.0;
+	private static double angleSum = 0.0;
 	private double ratio;
 	private int deleteStop;
 	private int threadRunTime;
@@ -132,9 +133,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
 		forwardButton = new Button(150,550,335,70, new ImageIcon("Move Forward Button.png"));
 		backwardButton = new Button(forwardButton.getX()+forwardButton.getW()+30, 550, 335,70, new ImageIcon("MoveBackwardButton.png"));
-		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(50)-50, 100,100, new ImageIcon ("RightArrowButton.png"));
-		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(50)-50, 100,100, new ImageIcon ("LeftArrowButton.png"));
-		selectButton = new Button (centerXPosition(560), centerYPosition(70), 560,70, new ImageIcon("SelectButton.png"));
+		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(130)-50, 100,130, new ImageIcon ("RightArrowButton.png"));
+		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(130)-50, 100,130, new ImageIcon ("LeftArrowButton.png"));
+		selectButton = new Button (centerXPosition(170), 550, 170,70, new ImageIcon("SelectButton.png"));
 		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
 
 		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
@@ -372,8 +373,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private void ReorderTasksScreen(Graphics g2d){
 		g2d.setColor(Color.white);
 		drawScreen(g2d, new ImageIcon("ReorderingTasksBackground.png"));
-		drawButton(g2d, forwardButton);
-		drawButton(g2d, backwardButton);
+		//drawButton(g2d, forwardButton);
+		//drawButton(g2d, backwardButton);
 		drawButton(g2d, rightArrowButton);
 		drawButton(g2d, leftArrowButton);
 		drawButton(g2d, selectButton);
@@ -454,7 +455,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		if(threadRunTime != 0){
 			circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
-			miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getImg()), (threadRunTime*360.00000/milliseconds))));
+			miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getOgImage()), (threadRunTime*360.00000/milliseconds)) ));
 		}
 		//g2d.drawImage(new ImageIcon("Ship Trail.png").getImage(), (int)miniSpaceship.getX(), (int)(miniSpaceship.getY() + miniSpaceship.getH()), 50,100, this);
 
@@ -619,7 +620,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		 // Use higher quality rendering
 		graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		graphic.rotate(Math.toRadians(angle), w / 2, h / 2);
+
+		angleSum += angle;
+
+		graphic.rotate(Math.toRadians(angleSum + 45), w / 2, h / 2);
 		graphic.drawRenderedImage(bimg, null);
 		graphic.dispose();
 		return rotated;
@@ -925,6 +929,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} else{
 				leftArrowButton.setImg(new ImageIcon ("LeftArrowButton.png"));
 			}
+
+			if(selectButton.hover(e.getX(), e.getY())){
+				selectButton.setImg(new ImageIcon ("SelectHover.png"));
+			} else{
+				selectButton.setImg(new ImageIcon ("SelectButton.png"));
+			}
 		}
 
 		if(screenstatus.equals("Timer")){
@@ -1074,6 +1084,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} }}
 
 		if(screenstatus.equals("Reorder Tasks")){
+			/* 
 			if(forwardButton.hover(e.getX(), e.getY())){
 				forwardButton.setImg(new ImageIcon ("MoveForwardHover.png"));
 				screenstatus = "Timer";
@@ -1082,7 +1093,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(backwardButton.hover(e.getX(), e.getY())){
 				backwardButton.setImg(new ImageIcon ("MoveBackwardHover.png"));
 			}
-	
+			*/
 			if(rightArrowButton.hover(e.getX(), e.getY())){
 				if(taskIteratePos<tasks.size()-1){
 					taskIteratePos++;
@@ -1093,7 +1104,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				if(taskIteratePos>0){
 					taskIteratePos--;
 				}
-			}	
+			}
+			if(selectButton.hover(e.getX(), e.getY())){
+				screenstatus = "Countdown";
+			}
 		}
 		
 		if(screenstatus.equals("Timer")){

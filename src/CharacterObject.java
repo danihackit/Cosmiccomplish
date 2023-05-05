@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class CharacterObject {
 	private double x,y,w,h;
 	private int xm,ym;
-	private ImageIcon characterImage;
+	private ImageIcon characterImage, ogImage;
 	
 	public CharacterObject() {
 		x = 0;
@@ -27,6 +27,17 @@ public class CharacterObject {
 		w= wv;
 		h = hv;
 	}
+
+	public CharacterObject (int xv, int yv, int wv, int hv, ImageIcon i, ImageIcon io) {
+		x = xv;
+		y = yv;
+		characterImage = i;
+		xm = 0;
+		ym = 0;
+		w= wv;
+		h = hv;
+		ogImage = io;
+	}
 	
 	//Alien Ship Constructor
 	public CharacterObject (int xv, int yv, int width, int height, ImageIcon i, int xmv, int ymv) {
@@ -38,6 +49,8 @@ public class CharacterObject {
 		xm = xmv;
 		ym = ymv;
 	}
+
+	
 	
 	//Getters and Setters
 	
@@ -62,6 +75,10 @@ public class CharacterObject {
 	}
 	public ImageIcon getImg() {
 		return characterImage;
+	}
+
+	public ImageIcon getOgImage(){
+		return ogImage;
 	}
 	
 	//Setters
