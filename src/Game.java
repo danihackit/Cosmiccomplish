@@ -253,7 +253,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Testing Room")){
 			
 			drawScreen(g2d, new ImageIcon("void.png"));
-			//circularMotion(g2d,astronaut,100,true);
+			circularMotion(g2d,astronaut,100,true,10.0);
 
 			ImageIcon test1 = new ImageIcon("Astronaut Facing Left Lifting None.png");
 			BufferedImage test = new BufferedImage(
@@ -402,7 +402,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(begintime !=0){
 			if(System.currentTimeMillis()-begintime>=1600){
 				screenstatus = "Countdown";
-				initialTime= System.currentTimeMillis();
+				initialTime= 0;
 
 				begintime = 0;
 			}
@@ -412,54 +412,70 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 
 	private void CountdownScreen(Graphics g2d){
+		finishedTimerInput.setImg(new ImageIcon("Still Frame Timer Input Button.png"));
+		stupidvscode = false;
+		boolean timer = true;
 		setSeconds = 59;
 
 		seconds = Integer.valueOf(String.valueOf((System.currentTimeMillis() - initialTime)/1000));
+
 		
-		if(seconds>=setSeconds +1) {
-			seconds = 1;
-			initialTime= System.currentTimeMillis();
-			minutes++;
-		}
-		if(minutes >= setMinutes && setSeconds-seconds == 0) {
-			System.out.println("DONE!");
+		
+		if(timer){
+
+
+
+			if(seconds>=setSeconds +1) {
+				seconds = 1;
+				initialTime= System.currentTimeMillis();
+				minutes++;
+			}
+
+
+			if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
+				output = "0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds-seconds);
+			}
+			if(setSeconds-seconds < 10 && setMinutes-minutes > 10) {
+				output = String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+			}
+			if(setSeconds-seconds < 10 && setMinutes-minutes <10) {
+				output = "0"+String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+			
+			}
+			if(setMinutes-minutes >= 10 && setSeconds-seconds >= 10) {
+				output = String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
+
+			}
+
+			if(threadRunTimeHelper != 0){
+				threadRunTime = (int)(System.currentTimeMillis()-threadRunTimeHelper);
+				threadRunTimeHelper = System.currentTimeMillis();
+			} else {
+				threadRunTimeHelper = System.currentTimeMillis();
+			}
+
+			if(minutes >= setMinutes && setSeconds-seconds == 0) {
+				System.out.println("DONE!");
+				angleSum = 0;
+				output = "0:00:00";
+				timer = false;
+			}
+
+			
 		}
 
-		if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
-			output = "0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds-seconds);
-		}
-		if(setSeconds-seconds < 10 && setMinutes-minutes > 10) {
-			output = String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
-		}
-		if(setSeconds-seconds < 10 && setMinutes-minutes <10) {
-			output = "0"+String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
 		
-		}
-		if(setMinutes-minutes >= 10 && setSeconds-seconds >= 10) {
-			output = String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
-
-		}
 
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
-
-		
-		if(threadRunTimeHelper != 0){
-			threadRunTime = (int)(System.currentTimeMillis()-threadRunTimeHelper);
-			threadRunTimeHelper = System.currentTimeMillis();
-		} else {
-			threadRunTimeHelper = System.currentTimeMillis();
-		}
-
 		drawObject(g2d, myPlanet);
-		long milliseconds = setSeconds*1000 + setMinutes*60000 + setHours*36000000;
+		long milliseconds = setSeconds*1000 + (setMinutes-1)*60000 + setHours*36000000;
 
-		if(threadRunTime != 0){
-			circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
-			miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getOgImage()), (threadRunTime*360.00000/milliseconds)) ));
-		}
-		//g2d.drawImage(new ImageIcon("Ship Trail.png").getImage(), (int)miniSpaceship.getX(), (int)(miniSpaceship.getY() + miniSpaceship.getH()), 50,100, this);
-
-		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
+			if(threadRunTime != 0){
+				circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
+				miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getOgImage()), (threadRunTime*360.00000/milliseconds)) ));
+			}
+			
+			typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
 
 	}
 	
@@ -760,15 +776,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 		if(key==70){
-			/*screenstatus = "Testing Room";
-			/*screenstatus = "Testing Room";
+			screenstatus = "Testing Room";
+			screenstatus = "Testing Room";
 			testX = centerXPosition(40);
 			testY = centerYPosition(40);
 			diameter = 200;
 			angle = 0.0;
 
 			astronaut.setW((int)(121/2));
-			astronaut.setH((int)(176/2));*/
+			astronaut.setH((int)(176/2));
 
 			//miniSpaceship.setImg(rotatedImageIcon(miniSpaceship.getImg(), 20.0));
 
@@ -953,6 +969,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 	
 	public void operateTextBox(TextBox a) {
+		if(!currentInput.equals("")){
+		if(currentInput.substring(currentInput.length()-1,currentInput.length()).equals("|")) {
+			currentInput = currentInput.substring(0,currentInput.length()-1);
+			a.setAffiliatedText(currentInput);
+		}
+	}	
 		a.setInputStatus(true);
 		currentInputBox = a;
 		currentInput = a.getAffiliatedText();
@@ -980,6 +1002,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Start")) {
 			if(invisibleButton.hover(e.getX(), e.getY())){
 				screenstatus = "Play";
+				
 			} else if(aboutButton.hover(e.getX(), e.getY())){
 				screenstatus = "About";
 			} else if(storeButton.hover(e.getX(), e.getY())) {
@@ -987,19 +1010,19 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		
-		if(screenstatus.equals("About")) {
+		else if(screenstatus.equals("About")) {
 			if(homeButton.hover(e.getX(), e.getY())) {
 				screenstatus = "Start";
 			}
 		}
 		
-		if(screenstatus.equals("Store")) {
+		else if(screenstatus.equals("Store")) {
 			if(homeButton.hover(e.getX(), e.getY())) {
 				screenstatus = "Start";
 			}
 		}
 		
-		if(screenstatus.equals("Play")) {
+		else if(screenstatus.equals("Play")) {
 			if(taskButton.hover(e.getX(), e.getY())){
 				screenstatus = "Input";
 			}else if(!tasks.isEmpty()){
@@ -1010,7 +1033,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		
 		
-		if(screenstatus.equals("Input")){
+		else if(screenstatus.equals("Input")){
 			boolean tempb = false;
 			if(finishEnteringTaskNotif || taskAdded){
 				if(XButton.hover(e.getX(),e.getY())){
@@ -1083,7 +1106,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 			} }}
 
-		if(screenstatus.equals("Reorder Tasks")){
+		else if(screenstatus.equals("Reorder Tasks")){
 			/* 
 			if(forwardButton.hover(e.getX(), e.getY())){
 				forwardButton.setImg(new ImageIcon ("MoveForwardHover.png"));
@@ -1106,11 +1129,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 			}
 			if(selectButton.hover(e.getX(), e.getY())){
-				screenstatus = "Countdown";
+				screenstatus = "Timer";
 			}
 		}
 		
-		if(screenstatus.equals("Timer")){
+		else if(screenstatus.equals("Timer")){
 			boolean tempb = false;
 			if(hoursInput.hover(e.getX(), e.getY())) {
 				operateTextBox(hoursInput);
@@ -1137,7 +1160,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 							setHours = 0;
 						}
 
-						setMinutes = Integer.valueOf(minutesInput.getAffiliatedText())-1;
+						setMinutes = Integer.valueOf(minutesInput.getAffiliatedText());
 						
 						begintime = System.currentTimeMillis();
 						finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
