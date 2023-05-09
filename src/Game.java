@@ -86,6 +86,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean taskAdded = false;
 	private boolean inputStat;
 	private boolean stupidvscode;
+	private boolean timerDoneNotif = false;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -221,6 +222,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(taskAdded && screenstatus.equals("Input")){
 			drawScreen(g2d,new ImageIcon("White Filter.png"));
 			g2d.drawImage(new ImageIcon("Task Added Notification.png").getImage(),centerXPosition(800),centerYPosition(800)-15,800,800, this);
+			drawButton(g2d, XButton);
+		}
+
+		if(timerDoneNotif && screenstatus.equals("Countdown")){
+			drawScreen(g2d, new ImageIcon("White Filter.png"));
+			g2d.drawImage(new ImageIcon ("TaskCompletedNotif.png").getImage(), 0,0,1400,725, this);
 			drawButton(g2d, XButton);
 		}
 
@@ -418,12 +425,19 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		setSeconds = 59;
 
 		seconds = Integer.valueOf(String.valueOf((System.currentTimeMillis() - initialTime)/1000));
+		System.out.println(threadRunTime);
+		
+		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
+		drawObject(g2d, myPlanet);
+		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
 
-		
-		
 		if(timer){
-
-
+			long milliseconds = setSeconds*1000 + (setMinutes-1)*60000 + setHours*36000000;
+		
+			if(threadRunTime != 0){
+				circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
+				miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getOgImage()), (threadRunTime*360.00000/milliseconds)) ));
+			}
 
 			if(seconds>=setSeconds +1) {
 				seconds = 1;
@@ -458,24 +472,33 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				System.out.println("DONE!");
 				angleSum = 0;
 				output = "0:00:00";
+				//minutes = setMinutes+1;
+				seconds = setSeconds;
+				//setMinutes = 0;
+				//minutes = 0;
+				threadRunTime = 0;
+				miniSpaceship.setImg(new ImageIcon(miniSpaceship.getOgImage().getImage()));
+				//timerDoneNotif = true;
 				timer = false;
 			}
 
 			
 		}
 
-		
 
-		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
-		drawObject(g2d, myPlanet);
-		long milliseconds = setSeconds*1000 + (setMinutes-1)*60000 + setHours*36000000;
-
-			if(threadRunTime != 0){
-				circularMotion(g2d, miniSpaceship, (int)(myPlanet.getW()+20)/2, false,(threadRunTime*360.00000/milliseconds));
-				miniSpaceship.setImg(new ImageIcon(rotate(imageIconToBufferedImage(miniSpaceship.getOgImage()), (threadRunTime*360.00000/milliseconds)) ));
-			}
-			
-			typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
+	 	/*if(minutes >= setMinutes && setSeconds-seconds == 0) {
+			System.out.println("DONE!");
+			angleSum = 0;
+			output = "0:00:00";
+			//setSeconds = 0;
+			seconds = setSeconds;
+			//setMinutes = 0;
+			//minutes = 0;
+			threadRunTime = 0;
+			miniSpaceship.setImg(new ImageIcon(miniSpaceship.getOgImage().getImage()));
+			timerDoneNotif = true;
+			timer = false;
+		}*/
 
 	}
 	
