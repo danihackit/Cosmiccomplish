@@ -87,6 +87,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean inputStat;
 	private boolean stupidvscode;
 	private boolean timerDoneNotif = false;
+	private boolean timer;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -223,12 +224,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			drawScreen(g2d,new ImageIcon("White Filter.png"));
 			g2d.drawImage(new ImageIcon("Task Added Notification.png").getImage(),centerXPosition(800),centerYPosition(800)-15,800,800, this);
 			drawButton(g2d, XButton);
+			seconds = setSeconds+1;
 		}
 
 		if(timerDoneNotif && screenstatus.equals("Countdown")){
 			drawScreen(g2d, new ImageIcon("White Filter.png"));
-			g2d.drawImage(new ImageIcon ("TaskCompletedNotif.png").getImage(), 0,0,1400,725, this);
-			drawButton(g2d, XButton);
+			g2d.drawImage(new ImageIcon ("TimerCompleteNotif.png").getImage(), centerXPosition(750),centerYPosition(400)-20,750,400, this);
+			//drawButton(g2d, XButton);
 		}
 
 		//Astronaut
@@ -421,11 +423,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private void CountdownScreen(Graphics g2d){
 		finishedTimerInput.setImg(new ImageIcon("Still Frame Timer Input Button.png"));
 		stupidvscode = false;
-		boolean timer = true;
+		//boolean timer = true;
 		setSeconds = 59;
 
 		seconds = Integer.valueOf(String.valueOf((System.currentTimeMillis() - initialTime)/1000));
-		System.out.println(threadRunTime);
+		//System.out.println(threadRunTime);
 		
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 		drawObject(g2d, myPlanet);
@@ -472,13 +474,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				System.out.println("DONE!");
 				angleSum = 0;
 				output = "0:00:00";
-				//minutes = setMinutes+1;
+				
 				seconds = setSeconds;
-				//setMinutes = 0;
-				//minutes = 0;
+				
 				threadRunTime = 0;
 				miniSpaceship.setImg(new ImageIcon(miniSpaceship.getOgImage().getImage()));
-				//timerDoneNotif = true;
+				timerDoneNotif = true;
+				
 				timer = false;
 			}
 
@@ -486,19 +488,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 
-	 	/*if(minutes >= setMinutes && setSeconds-seconds == 0) {
-			System.out.println("DONE!");
-			angleSum = 0;
-			output = "0:00:00";
-			//setSeconds = 0;
-			seconds = setSeconds;
-			//setMinutes = 0;
-			//minutes = 0;
-			threadRunTime = 0;
-			miniSpaceship.setImg(new ImageIcon(miniSpaceship.getOgImage().getImage()));
-			timerDoneNotif = true;
-			timer = false;
-		}*/
+	 	
 
 	}
 	
@@ -988,6 +978,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 		
+
+		
 		
 	}
 	
@@ -1176,7 +1168,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				if(invisibleButton2.hover(e.getX(), e.getY())){
 
 					if(!minutesInput.getAffiliatedText().isEmpty()){
-
+						
 						if(!hoursInput.getAffiliatedText().isEmpty()){
 							setHours = Integer.valueOf(hoursInput.getAffiliatedText());
 						} else {
@@ -1190,6 +1182,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 						
 
 						stupidvscode = true;
+						timer = true;
 
 						//System.out.println(setHours + ":" + setMinutes);
 
@@ -1199,6 +1192,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 					}
 				} 
 			}
+
 
 			if(!tempb){
 				currentInputBox = null;
