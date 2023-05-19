@@ -91,7 +91,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Strings
 	//private String screenstatus = "Start Up";
-	private String screenstatus = "Start Up";
+	private String screenstatus = "Interior";
 	private String temporaryTaskName = new String("");
 	private String temporaryTaskDate = new String("");
 	private String temporaryTaskReward = new String("");
@@ -102,6 +102,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 	//Array Lists
 	private ArrayList <Task> tasks = new ArrayList();
+	private ArrayList <Animation> animRand = new ArrayList();
+	
+	private Animation thisAnim = null;
+	private int thisLength = 0;
+	private long thisStart = 0;
 	
 	/*
 	  _       __    _       __    __    ____  _      ____  _     _____ 
@@ -150,6 +155,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		hoursInput = new TextBox(426, 240, 125,170, 0, false, "");
 		minutesInput = new TextBox(720, 240, 450,150, 0, false, "");
+
+		animRand.add(new Animation(40500,new ImageIcon("Gravity Animation.gif")));
+		animRand.add(new Animation(40500,new ImageIcon("Stargazing Animation.gif")));
 
 	}
 
@@ -209,6 +217,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			TimerScreen(g2d);
 		} else if(screenstatus.equals("Countdown")){
 			CountdownScreen(g2d);
+		} else if(screenstatus.equals("Interior")) {
+			InteriorScreen(g2d);
 		}
 		
 		textTimer();
@@ -486,10 +496,24 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			
 		}
-
-
 	 	
 
+	}
+
+	private void InteriorScreen(Graphics g2d){
+		if(!(thisAnim == null)){
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(0,0,1400,725);
+			g2d.drawImage(thisAnim.getGif().getImage(),0,0,getWidth(),getHeight(), this);
+
+			if(System.currentTimeMillis() - thisStart >= thisAnim.getLength()){
+				thisAnim = null;
+			}
+		}
+		else {
+			thisAnim = animRand.get((int)(Math.random()*(animRand.size())));
+			thisStart = System.currentTimeMillis();
+		}
 	}
 	
 	/*
