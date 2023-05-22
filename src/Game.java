@@ -11,6 +11,8 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 
+//dani successfully downloaded VS Code on her home computer!
+
 public class Game  extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 
 	/*
