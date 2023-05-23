@@ -46,6 +46,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button finishedTimerInput, invisibleButton2;
 	private Button yesButton, noButton;
 	private Button claimRewardButton, selectNewTaskButton, setNewTimerButton;
+	private Button backButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 	private TextBox currentInputBox;
@@ -97,6 +98,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Strings
 	//private String screenstatus = "Start Up";
 	private String screenstatus = "Start Up";
+	private String screenComingFrom;
 	private String temporaryTaskName = new String("");
 	private String temporaryTaskDate = new String("");
 	private String temporaryTaskReward = new String("");
@@ -134,7 +136,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		storeButton = new Button(900, 300,140,56, new ImageIcon ("StoreButton2.png"));
-		homeButton = new Button (centerXPosition(140), centerYPosition(70), 140, 70, new ImageIcon("HomeButton2.png"));
+		homeButton = new Button (centerXPosition(140), 25, 140, 70, new ImageIcon("HomeButton2.png"));
 		taskButton = new Button(centerXPosition(140),centerYPosition(56),140,56, new ImageIcon("Task Button.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
@@ -152,6 +154,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		claimRewardButton = new Button(centerXPosition(500),centerYPosition(60)-100,500,60, new ImageIcon("ClaimReward.png"));
 		selectNewTaskButton = new Button(centerXPosition(650), centerYPosition(70),650,70, new ImageIcon ("SelectNewTask.png"));
 		setNewTimerButton = new Button(centerXPosition(550), centerYPosition(65), 550,65, new ImageIcon ("SetNewTimerButton.png"));
+		backButton = new Button(centerXPosition(150), 600, 150,70, new ImageIcon ("BackButton.png"));
 
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
@@ -368,14 +371,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private void AboutScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
 		g2d.setColor(Color.white);
-		g2d.drawString("About",500,500);
+		g2d.drawImage(new ImageIcon("Cosmiccomplish About Note.png").getImage(), centerXPosition(800), centerYPosition(500), 800,500,this);
 		drawButton(g2d, homeButton);
 	}
 	
 	private void StoreScreen(Graphics g2d) {
 		drawScreen(g2d, new ImageIcon("End Frame.png"));
 		g2d.setColor(Color.white);
-		g2d.drawString("Store", 500, 500);
+		g2d.drawString("This is currently a work in progress!", 500, 500);
 		drawButton(g2d, homeButton);
 	}
 
@@ -391,7 +394,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		typeTextBoxToFont(g2d,taskNameInput,30);
 		typeTextBoxToFont(g2d,taskDateInput,30);
 		typeTextBoxToFont(g2d, taskRewardInput, 30);
-		typeTextBoxToFont(g2d, taskPositionInput, 30);
+		//typeTextBoxToFont(g2d, taskPositionInput, 30);
 
 		drawButton(g2d, finishedInputtingTask);
 	}
@@ -442,13 +445,18 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		stupidvscode = false;
 		//boolean timer = true;
 		setSeconds = 59;
-
 		seconds = Integer.valueOf(String.valueOf((System.currentTimeMillis() - initialTime)/1000));
 		//System.out.println(threadRunTime);
 		
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 		drawObject(g2d, myPlanet);
 		typeToFontNOBOX(g2d, output, centerXPosition(getWidthForText(output, 40)),20,300,50,0,40);
+		
+		if(tasks.size()>0){
+			String currentTask = "Current Task: "+ tasks.get(taskIteratePos).getTaskName();
+			displayTaskElement(g2d, currentTask, 610);
+		}
+		
 
 		if(timer){
 			long milliseconds = setSeconds*1000 + (setMinutes-1)*60000 + setHours*36000000;
@@ -505,25 +513,34 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 	}
 	private void ChooseRewardScreen(Graphics g2d){
+		//screen is used when user says they did finish their task (yes)
 		timer=false;
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 		drawObject(g2d, blankPopUpBox);
 		drawButton(g2d, claimRewardButton);
 		drawButton(g2d, selectNewTaskButton);
+		screenComingFrom = "Choose Reward";
 
 	}
 	private void SetNewTimerScreen(Graphics g2d){
+		//screen is used when user says they did not finish their task (no)
 		timer=false;
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 		drawObject(g2d, blankPopUpBox);
 		drawButton(g2d, claimRewardButton);
 		drawButton(g2d, setNewTimerButton);
+		screenComingFrom = "Set New Timer";
 		
 		
 	}
 	private void RewardScreen(Graphics g2d){
-		drawScreen(g2d, new ImageIcon("End Frame.png"));
-		g2d.drawString("claim your reward", 500,500);
+		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
+		if(tasks.size()>0){
+			displayTaskElement(g2d, "Reward: " + tasks.get(taskIteratePos).getRewardValue(),375);
+		} else if(tasks.size()==0){
+			typeToFontNOBOX(g2d, "Enjoy your reward!", centerXPosition(700), centerYPosition(50), 700,50,0,30);
+		}
+		drawButton(g2d, backButton);
 	}
 	
 	/*
@@ -847,6 +864,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			timerDoneNotif = true;
 		}
 		}
+
+		if(screenstatus.equals("Claim Reward")){
+			if(key==65){ //a
+				screenstatus = "Choose Reward";
+			}
+		}
 		
 		if(!(currentInputBox==null)) {
 			char character = e.getKeyChar();
@@ -1054,6 +1077,14 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 
+		if(screenstatus.equals("Claim Reward")){
+			if(backButton.hover(e.getX(), e.getY())){
+				backButton.setImg(new ImageIcon ("BackHover.png"));
+			} else{
+				backButton.setImg(new ImageIcon ("BackButton.png"));
+			}
+		}
+
 		
 
 		
@@ -1156,12 +1187,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} else {
 				doNotOperateTextBox(taskRewardInput);
 			}
-			if(taskPositionInput.hover(e.getX(), e.getY())){
+			/*if(taskPositionInput.hover(e.getX(), e.getY())){
 				operateTextBox(taskPositionInput);
 				tempb=true;
 			} else{
 				doNotOperateTextBox(taskPositionInput);
-			}
+			}*/
 
 			if(!tempb){
 				currentInputBox = null;
@@ -1188,7 +1219,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 						taskNameInput.setAffiliatedText("Task: ");
 						taskDateInput.setAffiliatedText("Due Date: ");
 						taskRewardInput.setAffiliatedText("Reward: ");
-						taskPositionInput.setAffiliatedText("Position: ");
+						//taskPositionInput.setAffiliatedText("Position: ");
 					} else {
 						finishEnteringTaskNotif = true;
 					}
@@ -1231,50 +1262,43 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				doNotOperateTextBox(minutesInput);
 			}
 
-			if(screenstatus.equals("Timer")){
-				if(invisibleButton2.hover(e.getX(), e.getY())){
+			
+			if(invisibleButton2.hover(e.getX(), e.getY())){
 
-					if(!minutesInput.getAffiliatedText().isEmpty()){
+				if(!minutesInput.getAffiliatedText().isEmpty()){
 						
-						if(!hoursInput.getAffiliatedText().isEmpty()){
+					if(!hoursInput.getAffiliatedText().isEmpty()){
 							setHours = Integer.valueOf(hoursInput.getAffiliatedText());
-						} else {
+					} else {
 							setHours = 0;
-						}
-
-						setMinutes = Integer.valueOf(minutesInput.getAffiliatedText());
-						
-						begintime = System.currentTimeMillis();
-						finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
-						
-
-						stupidvscode = true;
-						timer = true;
+					}
+					setMinutes = Integer.valueOf(minutesInput.getAffiliatedText());
+					begintime = System.currentTimeMillis();
+					finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
+					stupidvscode = true;
+					timer = true;
 
 						//System.out.println(setHours + ":" + setMinutes);
-
-						
 					} else {
 						stupidvscode = false;
 					}
 				} 
-			}
-
-
-
 			if(!tempb){
 				currentInputBox = null;
 			}
 		}
 
-		if(timerDoneNotif){
-			if(yesButton.hover(e.getX(), e.getY())){
-				screenstatus = "Choose Reward";
-			}
-			if(noButton.hover(e.getX(), e.getY())){
-				screenstatus = "Set New Timer";
+		if(screenstatus.equals("Countdown")){
+			if(timerDoneNotif){
+				if(yesButton.hover(e.getX(), e.getY())){
+					screenstatus = "Choose Reward";
+				}
+				if(noButton.hover(e.getX(), e.getY())){
+					screenstatus = "Set New Timer";
+				}
 			}
 		}
+		
 
 		if(screenstatus.equals("Choose Reward")){
 			if(claimRewardButton.hover(e.getX(), e.getY())){
@@ -1282,6 +1306,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 			if(selectNewTaskButton.hover(e.getX(), e.getY())){
 				screenstatus = "Reorder Tasks";
+				if(tasks.size()>0){
+					tasks.remove(taskIteratePos);
+				}
 			}
 		}
 
@@ -1292,6 +1319,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(setNewTimerButton.hover(e.getX(), e.getY())){
 				screenstatus = "Timer";
 			}
+		}
+
+		if(screenstatus.equals("Claim Reward")){
+			if(screenComingFrom.equals("Choose Reward")){
+				if(backButton.hover(e.getX(), e.getY())){
+					screenstatus = "Choose Reward";
+				} 
+			}
+			if(screenComingFrom.equals("Set New Timer")){
+				if(backButton.hover(e.getX(), e.getY())){
+					screenstatus = "Set New Timer";
+				} 
+			}
+				
 		}
 
 		
