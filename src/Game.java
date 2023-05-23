@@ -481,9 +481,54 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				initialTime= System.currentTimeMillis();
 				minutes++;
 			}
+			
+			if(setHours==1 && setMinutes==0){
+				setMinutes=60;
+				setHours=0;
+			}
+			if(setHours>0 && setMinutes>0){
+				if(minutes>setMinutes){
+					setHours--;
+					setMinutes = 61;
+				}
+			}
+			if(setHours>0){
+				if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
+					output = String.valueOf(setHours)+":0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds-seconds);
+				}
+				if(setSeconds-seconds < 10 && setMinutes-minutes > 10) {
+					output = String.valueOf(setHours)+":"+ String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+				}
+				if(setSeconds-seconds < 10 && setMinutes-minutes <10) {
+					output = String.valueOf(setHours)+":0"+String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+				
+				}
+				if(setMinutes-minutes >= 10 && setSeconds-seconds >= 10) {
+					output = String.valueOf(setHours)+ ":"+ String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
+				}
+				if(setMinutes-minutes <= 10 && setSeconds-seconds >= 10) {
+					output = String.valueOf(setHours)+":0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
+				}
+			} else if(setHours==0) {
+				if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
+					output = "0:"+"0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds-seconds);
+				}
+				if(setSeconds-seconds < 10 && setMinutes-minutes > 10) {
+					output = "0:"+String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+				}
+				if(setSeconds-seconds < 10 && setMinutes-minutes <10) {
+					output = "0:"+"0"+String.valueOf(setMinutes-minutes) + ":0" + String.valueOf(setSeconds - seconds);
+				
+				}
+				if(setMinutes-minutes >= 10 && setSeconds-seconds >= 10) {
+					output = "0:"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
+				}
+				if(setMinutes-minutes <= 10 && setSeconds-seconds >= 10) {
+					output = "0:"+"0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
+				}
+			}
 
-
-			if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
+			/*if(setMinutes-minutes < 10 && setSeconds-seconds > 10) {
 				output = "0"+String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds-seconds);
 			}
 			if(setSeconds-seconds < 10 && setMinutes-minutes > 10) {
@@ -496,7 +541,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(setMinutes-minutes >= 10 && setSeconds-seconds >= 10) {
 				output = String.valueOf(setMinutes-minutes) + ":" + String.valueOf(setSeconds - seconds);
 
-			}
+			}*/
 
 			if(threadRunTimeHelper != 0){
 				threadRunTime = (int)(System.currentTimeMillis()-threadRunTimeHelper);
@@ -505,7 +550,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				threadRunTimeHelper = System.currentTimeMillis();
 			}
 
-			if(minutes >= setMinutes && setSeconds-seconds == 0) {
+			if(setHours-hours==0 && minutes >= setMinutes && setSeconds-seconds == 0) {
 				System.out.println("DONE!");
 				angleSum = 0;
 				output = "0:00:00";
