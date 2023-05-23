@@ -41,7 +41,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button taskButton;
 	private Button finishedInputtingTask;
 	private Button XButton;
-	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton, selectButton;
+	private Button forwardButton, backwardButton, rightArrowButton, leftArrowButton, selectButton, removeButton;
 	private Button viewTasksButton;
 	private Button finishedTimerInput, invisibleButton2;
 	private Button yesButton, noButton;
@@ -142,15 +142,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		storeButton = new Button(900, 300,140,56, new ImageIcon ("StoreButton2.png"));
 		homeButton = new Button (centerXPosition(140), 25, 140, 70, new ImageIcon("HomeButton2.png"));
-		taskButton = new Button(centerXPosition(140),centerYPosition(56),140,56, new ImageIcon("Task Button.png"));
+		taskButton = new Button(centerXPosition(250),centerYPosition(80),250,80, new ImageIcon("NewTaskButton.png"));
 		finishedInputtingTask = new Button(1100,200,100,100, new ImageIcon("Checkmark2.png"));
 		XButton = new Button(1000,180,40,40, new ImageIcon("X Button.png"));
 		forwardButton = new Button(150,550,335,70, new ImageIcon("Move Forward Button.png"));
 		backwardButton = new Button(forwardButton.getX()+forwardButton.getW()+30, 550, 335,70, new ImageIcon("MoveBackwardButton.png"));
 		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(130)-50, 100,130, new ImageIcon ("RightArrowButton.png"));
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(130)-50, 100,130, new ImageIcon ("LeftArrowButton.png"));
-		selectButton = new Button (centerXPosition(170), 550, 170,70, new ImageIcon("SelectButton.png"));
-		viewTasksButton = new Button(centerXPosition(200), centerYPosition(56)+200, 200,56, new ImageIcon("ViewTaskButton.png"));
+		selectButton = new Button (centerXPosition(170)-110, 550, 170,70, new ImageIcon("SelectButton.png"));
+		removeButton = new Button(centerXPosition(170)+110, 550, 170,70, new ImageIcon ("RemoveButton.png"));
+		viewTasksButton = new Button(centerXPosition(280), centerYPosition(80)+120, 280,80, new ImageIcon("NewViewTaskButton.png"));
 
 		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
 		invisibleButton2 = new Button(659, 584, 109, 70, new ImageIcon("nan.png"));
@@ -417,6 +418,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawButton(g2d, rightArrowButton);
 		drawButton(g2d, leftArrowButton);
 		drawButton(g2d, selectButton);
+		drawButton(g2d, removeButton);
 
 		if(!tasks.isEmpty()){			
 			displayTaskElement(g2d, tasks.get(taskIteratePos).getTaskName(),175);
@@ -938,11 +940,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		}
 
-		if(screenstatus.equals("Claim Reward")){
-			if(key==65){ //a
-				screenstatus = "Choose Reward";
-			}
-		}
 		
 		if(!(currentInputBox==null)) {
 			char character = e.getKeyChar();
@@ -1041,15 +1038,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		if(screenstatus.equals("Play")){
 			if(taskButton.hover(e.getX(), e.getY())){
-				taskButton.setImg(new ImageIcon("Task Button Hover.png"));
+				taskButton.setImg(new ImageIcon("NewTaskHover.png"));
 			}else{
-				taskButton.setImg(new ImageIcon("Task Button.png"));
+				taskButton.setImg(new ImageIcon("NewTaskButton.png"));
 			}
 
 			if(viewTasksButton.hover(e.getX(), e.getY())){
-				viewTasksButton.setImg(new ImageIcon ("ViewTaskHover.png"));
+				viewTasksButton.setImg(new ImageIcon ("NewViewTaskHover.png"));
 			}else{
-				viewTasksButton.setImg(new ImageIcon ("ViewTaskButton.png"));
+				viewTasksButton.setImg(new ImageIcon ("NewViewTaskButton.png"));
 			}
 		}
 
@@ -1097,6 +1094,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				selectButton.setImg(new ImageIcon ("SelectHover.png"));
 			} else{
 				selectButton.setImg(new ImageIcon ("SelectButton.png"));
+			}
+			if(removeButton.hover(e.getX(), e.getY())){
+				removeButton.setImg(new ImageIcon("RemoveHover.png"));
+			} else{
+				removeButton.setImg(new ImageIcon("RemoveButton.png"));
 			}
 		}
 
@@ -1317,6 +1319,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(selectButton.hover(e.getX(), e.getY())){
 				screenstatus = "Timer";
 			}
+			if(!tasks.isEmpty()){
+				if(removeButton.hover(e.getX(), e.getY())){
+					tasks.remove(taskIteratePos);
+				}
+			}
 		}
 		
 		else if(screenstatus.equals("Timer")){
@@ -1391,6 +1398,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 			if(setNewTimerButton.hover(e.getX(), e.getY())){
 				screenstatus = "Timer";
+				timerDoneNotif = false;
+				setMinutes=0;
+				setHours=0;
+				if(!minutesInput.getAffiliatedText().isEmpty()){
+					minutesInput.setAffiliatedText("");
+				}
+				if(!hoursInput.getAffiliatedText().isEmpty()){
+					hoursInput.setAffiliatedText("");
+				}
+				
 			}
 		}
 
