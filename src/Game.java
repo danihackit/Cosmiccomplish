@@ -94,6 +94,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean stupidvscode;
 	private boolean timerDoneNotif = false;
 	private boolean timer;
+	private boolean confirmTaskDeletionNotif = false;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -150,7 +151,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		rightArrowButton = new Button(centerXPosition(100)+600, centerYPosition(130)-50, 100,130, new ImageIcon ("RightArrowButton.png"));
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(130)-50, 100,130, new ImageIcon ("LeftArrowButton.png"));
 		selectButton = new Button (centerXPosition(170)-110, 550, 170,70, new ImageIcon("SelectButton.png"));
-		removeButton = new Button(centerXPosition(170)+110, 550, 170,70, new ImageIcon ("RemoveButton.png"));
+		removeButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("RemoveButton.png"));
 		viewTasksButton = new Button(centerXPosition(280), centerYPosition(80)+120, 280,80, new ImageIcon("NewViewTaskButton.png"));
 
 		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
@@ -260,6 +261,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(timerDoneNotif && screenstatus.equals("Countdown")){
 			drawScreen(g2d, new ImageIcon("White Filter.png"));
 			g2d.drawImage(new ImageIcon ("TimerCompleteNotif.png").getImage(), centerXPosition(750),centerYPosition(400)-20,750,400, this);
+			drawButton(g2d, yesButton);
+			drawButton(g2d, noButton);
+		}
+
+		if(confirmTaskDeletionNotif && screenstatus.equals("Reorder Tasks")){
+			drawScreen(g2d, new ImageIcon("White Filter.png"));
+			g2d.drawImage(new ImageIcon ("ConfirmTaskDeletionNotif.png").getImage(), centerXPosition(750),centerYPosition(400)-40,750,400, this);
 			drawButton(g2d, yesButton);
 			drawButton(g2d, noButton);
 		}
@@ -1100,6 +1108,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} else{
 				removeButton.setImg(new ImageIcon("RemoveButton.png"));
 			}
+
+			if(confirmTaskDeletionNotif){
+				if(yesButton.hover(e.getX(), e.getY())){
+					yesButton.setImg(new ImageIcon ("YesButtonHover.png"));
+				} else{
+					yesButton.setImg(new ImageIcon ("YesButton.png"));
+				}
+	
+				if(noButton.hover(e.getX(), e.getY())){
+					noButton.setImg(new ImageIcon ("NoButtonHover.png"));
+				} else{
+					noButton.setImg(new ImageIcon ("NoButton.png"));
+				}
+			}
 		}
 
 		if(screenstatus.equals("Timer")){
@@ -1316,12 +1338,22 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 					taskIteratePos--;
 				}
 			}
-			if(selectButton.hover(e.getX(), e.getY())){
-				screenstatus = "Timer";
-			}
+			
 			if(!tasks.isEmpty()){
+				if(selectButton.hover(e.getX(), e.getY())){
+					screenstatus = "Timer";
+				}
 				if(removeButton.hover(e.getX(), e.getY())){
-					tasks.remove(taskIteratePos);
+					confirmTaskDeletionNotif = true;
+				}
+				if(confirmTaskDeletionNotif){
+					if(yesButton.hover(e.getX(), e.getY())){
+						tasks.remove(taskIteratePos);
+						confirmTaskDeletionNotif = false;
+					}
+					if(noButton.hover(e.getX(), e.getY())){
+						confirmTaskDeletionNotif = false;
+					}
 				}
 			}
 		}
