@@ -2,10 +2,14 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
+import javafx.scene.shape.SVGPath;
+
 public class CharacterObject {
 	private double x,y,w,h;
 	private int xm,ym;
+	private boolean unlocked, added;
 	private ImageIcon characterImage, ogImage;
+	private String objectName;
 	
 	public CharacterObject() {
 		x = 0;
@@ -15,6 +19,9 @@ public class CharacterObject {
 		xm = 0;
 		ym = 0;
 		characterImage = new ImageIcon("");
+		unlocked  = false;
+		added = false;
+
 	}
 	
 	//Player Ship Constructor
@@ -26,6 +33,9 @@ public class CharacterObject {
 		ym = 0;
 		w= wv;
 		h = hv;
+		added = false;
+		unlocked  = false;
+
 	}
 
 	public CharacterObject (int xv, int yv, int wv, int hv, ImageIcon i, ImageIcon io) {
@@ -37,6 +47,9 @@ public class CharacterObject {
 		w= wv;
 		h = hv;
 		ogImage = io;
+		added = false;
+		unlocked  = false;
+
 	}
 	
 	//Alien Ship Constructor
@@ -50,6 +63,16 @@ public class CharacterObject {
 		ym = ymv;
 	}
 
+	//For-Sale Constructor
+
+	public CharacterObject(int xv, int yv, int width, int height, ImageIcon i, String name){
+		x = xv;
+		y = yv;
+		w = width;
+		h = height;
+		characterImage = i;
+		objectName = name;
+	}
 	
 	
 	//Getters and Setters
@@ -80,8 +103,23 @@ public class CharacterObject {
 	public ImageIcon getOgImage(){
 		return ogImage;
 	}
+	public boolean getUnlocked(){
+		return unlocked;
+	}
+	public boolean getAdded(){
+		return added;
+	}
+	public String getName(){
+		return objectName;
+	}
 	
 	//Setters
+	public void setUnlocked(boolean n){
+		unlocked = n;
+	}
+	public void setAdded(boolean n){
+		added = n;
+	}
 	public void setX(double xv) {
 		x = xv;
 	}

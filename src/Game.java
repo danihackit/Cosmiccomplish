@@ -60,6 +60,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private int key;
 	private int mvmfactor;
 	private int taskIteratePos = 0;
+	private int storeIteratePos = 0;
 	private int setHours;
 	private int setMinutes;
 	private int setSeconds;
@@ -98,7 +99,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	//Strings
 	//private String screenstatus = "Start Up";
-	private String screenstatus = "Interior";
+	private String screenstatus = "Start Up";
 	private String screenComingFrom;
 	private String temporaryTaskName = new String("");
 	private String temporaryTaskDate = new String("");
@@ -111,6 +112,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	//Array Lists
 	private ArrayList <Task> tasks = new ArrayList();
 	private ArrayList <Animation> animRand = new ArrayList();
+	private ArrayList <CharacterObject> storeOptions = new ArrayList();
 	
 	private Animation thisAnim = null;
 	private int thisLength = 0;
@@ -170,10 +172,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		hoursInput = new TextBox(426, 240, 125,170, 0, false, "");
 		minutesInput = new TextBox(720, 240, 450,150, 0, false, "");
-
-		animRand.add(new Animation(40500,new ImageIcon("Gravity Animation.gif")));
-		animRand.add(new Animation(40500,new ImageIcon("Stargazing Animation.gif")));
-		animRand.add(new Animation(81000, new ImageIcon("Napping Animation.gif")));
 
 	}
 
@@ -400,6 +398,21 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setColor(Color.white);
 		g2d.drawString("This is currently a work in progress!", 500, 500);
 		drawButton(g2d, homeButton);
+
+		drawButton(g2d, rightArrowButton);
+		drawButton(g2d, leftArrowButton);
+		drawButton(g2d, selectButton);
+		drawButton(g2d, removeButton);
+
+		if(!tasks.isEmpty()){			
+			displayTaskElement(g2d, tasks.get(taskIteratePos).getTaskName(),175);
+			displayTaskElement(g2d, "Due Date: " + tasks.get(taskIteratePos).getDueDate(),275);
+			displayTaskElement(g2d, "Reward: " + tasks.get(taskIteratePos).getRewardValue(),375);
+			displayTaskElement(g2d, "" + (taskIteratePos + 1),465);
+
+		} else {
+			typeToFontNOBOX(g2d,"No Tasks to show!",centerXPosition(getWidthForText("No Tasks to show!",20)),centerYPosition(20)-40,500,50,0,20);
+		}
 	}
 
 	private void InputScreen(Graphics g2d){
@@ -807,7 +820,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 */
 		
 	public void generateAll() {
-		
+		animRand.add(new Animation(40500,new ImageIcon("Gravity Animation.gif")));
+		animRand.add(new Animation(40500,new ImageIcon("Stargazing Animation.gif")));
+		animRand.add(new Animation(81000, new ImageIcon("Napping Animation.gif")));
+
+		storeOptions.add(new CharacterObject());
 	}
 
 	public void nullThese(){
@@ -1428,6 +1445,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 				if(noButton.hover(e.getX(), e.getY())){
 					screenstatus = "Set New Timer";
+				}
+			} else {
+				Button spaceshipBu;
+				spaceshipBu = new Button((int)testX,(int)testY,(int)miniSpaceship.getW(),(int)miniSpaceship.getH(),new ImageIcon(""));
+
+				if(spaceshipBu.hover(e.getX(),e.getY())){
+					screenstatus = "Interior";
+				} else {
+					System.out.println(spaceshipBu.getX() + " and " + spaceshipBu.getY());
 				}
 			}
 		}
