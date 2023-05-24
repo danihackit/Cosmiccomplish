@@ -173,6 +173,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 		animRand.add(new Animation(40500,new ImageIcon("Gravity Animation.gif")));
 		animRand.add(new Animation(40500,new ImageIcon("Stargazing Animation.gif")));
+		animRand.add(new Animation(81000, new ImageIcon("Napping Animation.gif")));
 
 	}
 
@@ -500,6 +501,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				if(minutes>setMinutes){
 					setHours--;
 					setMinutes = 61;
+					setSeconds = 60;
 				}
 			}
 			if(setHours>0){
@@ -562,12 +564,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			if(setHours-hours==0 && minutes >= setMinutes && setSeconds-seconds == 0) {
 				System.out.println("DONE!");
+				angle = 0;
 				angleSum = 0;
 				output = "0:00:00";
 				
 				seconds = setSeconds;
 				
-				threadRunTime = 0;
 				miniSpaceship.setImg(new ImageIcon(miniSpaceship.getOgImage().getImage()));
 				timerDoneNotif = true;
 				
@@ -618,6 +620,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			if(System.currentTimeMillis() - thisStart >= thisAnim.getLength()){
 				thisAnim = null;
+				drawScreen(g2d, new ImageIcon("Default Frame.png"));
 			}
 		}
 		else {
@@ -805,6 +808,22 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 	public void generateAll() {
 		
+	}
+
+	public void nullThese(){
+		hours = 0;
+		minutes= 0;
+		seconds= 0;
+
+		threadRunTime = 0;
+
+		testX = centerXPosition(40);
+		testY = centerYPosition(40);
+		diameter = 200;
+		angle = 0.0;
+		angleSum = 0.0;
+		miniSpaceship = new CharacterObject(300, 300, 100, 100, new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)0)),new ImageIcon(rotate(imageIconToBufferedImage(new ImageIcon("Default Spaceship.png")), (long)0)));
+
 	}
 	
 	/*
@@ -1385,6 +1404,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 							setHours = 0;
 					}
 					setMinutes = Integer.valueOf(minutesInput.getAffiliatedText());
+					System.out.println(setMinutes);
+					nullThese();
 					begintime = System.currentTimeMillis();
 					finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
 					stupidvscode = true;
