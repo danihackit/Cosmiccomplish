@@ -10,6 +10,7 @@ public class CharacterObject {
 	private boolean unlocked, added;
 	private ImageIcon characterImage, ogImage;
 	private String objectName;
+	private int price;
 	
 	public CharacterObject() {
 		x = 0;
@@ -65,13 +66,14 @@ public class CharacterObject {
 
 	//For-Sale Constructor
 
-	public CharacterObject(int xv, int yv, int width, int height, ImageIcon i, String name){
+	public CharacterObject(int xv, int yv, int width, int height, ImageIcon i, int cost, String name){
 		x = xv;
 		y = yv;
 		w = width;
 		h = height;
 		characterImage = i;
 		objectName = name;
+		price = cost;
 	}
 	
 	
