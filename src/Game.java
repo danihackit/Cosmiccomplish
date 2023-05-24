@@ -158,8 +158,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		selectButton = new Button (centerXPosition(170)-110, 550, 170,70, new ImageIcon("SelectButton.png"));
 		removeButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("RemoveButton.png"));
 		//coconuts
-		purchaseButton = new Button (centerXPosition(170)-110, 550, 170,70, new ImageIcon("SelectButton.png"));
-		addButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("RemoveButton.png"));
+		purchaseButton = new Button (centerXPosition(200)-110, 550, 200,70, new ImageIcon("PurchaseButton.png"));
+		addButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("AddButton.png"));
 		viewTasksButton = new Button(centerXPosition(280), centerYPosition(80)+120, 280,80, new ImageIcon("NewViewTaskButton.png"));
 
 		finishedTimerInput = new Button(0, -50, 1400, 725, new ImageIcon("Still Frame Timer Input Button.png"));
@@ -409,6 +409,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawButton(g2d, leftArrowButton);
 		drawButton(g2d, purchaseButton);
 		drawButton(g2d, addButton);
+
+		if(storeOptions.get(storeIteratePos).getUnlocked()){
+			purchaseButton.setImg(new ImageIcon ("PurchasedButton.png"));
+		}
 
 		if(!storeOptions.isEmpty()){			
 			CharacterObject current = storeOptions.get(storeIteratePos);
@@ -1259,15 +1263,27 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 
 			//coconuts
 			if(purchaseButton.hover(e.getX(), e.getY())){
-				purchaseButton.setImg(new ImageIcon ("SelectHover.png"));
+				purchaseButton.setImg(new ImageIcon ("PurchaseButtonHover.png"));
+				if(storeOptions.get(storeIteratePos).getUnlocked()){
+					purchaseButton.setImg(new ImageIcon ("PurchasedButton.png"));
+				}
 			} else{
-				purchaseButton.setImg(new ImageIcon ("SelectButton.png"));
+				purchaseButton.setImg(new ImageIcon ("PurchaseButton.png"));
+				if(storeOptions.get(storeIteratePos).getUnlocked()){
+					purchaseButton.setImg(new ImageIcon ("PurchasedButton.png"));
+				}
 			}
 
 			if(addButton.hover(e.getX(), e.getY())){
-				addButton.setImg(new ImageIcon ("RemoveHover.png"));
+				addButton.setImg(new ImageIcon ("AddButtonHover.png"));
+				if(storeOptions.get(storeIteratePos).getAdded()){
+					addButton.setImg(new ImageIcon ("AddedButton.png"));
+				}
 			} else{
-				addButton.setImg(new ImageIcon ("RemoveButton.png"));
+				addButton.setImg(new ImageIcon ("AddButton.png"));
+				if(storeOptions.get(storeIteratePos).getAdded()){
+					addButton.setImg(new ImageIcon ("AddedButton.png"));
+				}
 			}
 		}
 		if(screenstatus.equals("Interior")){
@@ -1350,6 +1366,11 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			if(purchaseButton.hover(e.getX(), e.getY())){
 				//coconuts add an if statement for if you have enough coins and make a warning pop up if you don't
 				storeOptions.get(storeIteratePos).setUnlocked(true);
+				if(coins>storeOptions.get(storeIteratePos).getPrice()){
+					storeOptions.get(storeIteratePos).setUnlocked(true);
+					coins = coins-(storeOptions.get(storeIteratePos).getPrice());
+				}
+				
 			}
 
 			if(addButton.hover(e.getX(), e.getY()) && storeOptions.get(storeIteratePos).getUnlocked()){

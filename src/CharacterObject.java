@@ -114,7 +114,10 @@ public class CharacterObject {
 	public String getName(){
 		return objectName;
 	}
-	
+	public int getPrice(){
+		return price;
+	}
+
 	//Setters
 	public void setUnlocked(boolean n){
 		unlocked = n;
