@@ -47,6 +47,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button yesButton, noButton;
 	private Button claimRewardButton, selectNewTaskButton, setNewTimerButton;
 	private Button backButton,purchaseButton,addButton;
+	private Button backToTimerButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
 	private TextBox currentInputBox;
@@ -75,6 +76,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private double ratio;
 	private int deleteStop;
 	private int threadRunTime;
+	private int coins = 0;
 	
 	//Other Numbers
 	private long starttime;
@@ -96,6 +98,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean timerDoneNotif = false;
 	private boolean timer;
 	private boolean confirmTaskDeletionNotif = false;
+	private boolean addToCoins = false;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -167,6 +170,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		selectNewTaskButton = new Button(centerXPosition(650), centerYPosition(70),650,70, new ImageIcon ("SelectNewTask.png"));
 		setNewTimerButton = new Button(centerXPosition(550), centerYPosition(65), 550,65, new ImageIcon ("SetNewTimerButton.png"));
 		backButton = new Button(centerXPosition(150), 600, 150,70, new ImageIcon ("BackButton.png"));
+		backToTimerButton = new Button(950, 20, 400,70, new ImageIcon ("BackToTimerButton.png"));
 
 		taskNameInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+100, 560, 90, 7, false, "Task: ");
 		taskDateInput = new TextBox(centerXPosition(600) + 30,centerYPosition(600)+230, 560, 30, 11, false, "Due Date: ");
@@ -215,6 +219,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setColor(Color.WHITE);
 		((Graphics2D) g2d).setStroke(new BasicStroke(10));
 		
+		System.out.println(coins);
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
 			StartUpScreen(g2d);
@@ -621,6 +626,10 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		drawScreen(g2d, new ImageIcon("Timer Screen Background.png"));
 		if(tasks.size()>0){
 			displayTaskElement(g2d, "Reward: " + tasks.get(taskIteratePos).getRewardValue(),375);
+			if(addToCoins){
+				coins = coins + Integer.valueOf(tasks.get(taskIteratePos).getRewardValue());
+				addToCoins = false;
+			}
 		} else if(tasks.size()==0){
 			typeToFontNOBOX(g2d, "Enjoy your reward!", centerXPosition(700), centerYPosition(50), 700,50,0,30);
 		}
@@ -630,6 +639,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	}
 
 	private void InteriorScreen(Graphics g2d){
+		//drawButton(g2d, backToTimerButton);
 		if(!(thisAnim == null)){
 			g2d.setColor(Color.WHITE);
 			g2d.drawRect(0,0,1400,725);
@@ -644,6 +654,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			thisAnim = animRand.get((int)(Math.random()*(animRand.size())));
 			thisStart = System.currentTimeMillis();
 		}
+		drawButton(g2d, backToTimerButton);
 
 		for(CharacterObject c: storeOptions){
 			if(c.getAdded()){
@@ -1259,7 +1270,13 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				addButton.setImg(new ImageIcon ("RemoveButton.png"));
 			}
 		}
-
+		if(screenstatus.equals("Interior")){
+			if(backToTimerButton.hover(e.getX(), e.getY())){
+				backToTimerButton.setImg(new ImageIcon ("BackToTimerHover.png"));
+			} else{
+				backToTimerButton.setImg(new ImageIcon ("BackToTimerButton.png"));
+			}
+		}
 		
 		
 	}
@@ -1524,11 +1541,16 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				}
 			}
 		}
-		
+		if(screenstatus.equals("Interior")){
+			if(backToTimerButton.hover(e.getX(), e.getY())){
+				screenstatus = "Countdown";
+			} 
+		}
 
 		else if(screenstatus.equals("Choose Reward")){
 			if(claimRewardButton.hover(e.getX(), e.getY())){
 				screenstatus = "Claim Reward";
+				addToCoins = true;
 			}
 			if(selectNewTaskButton.hover(e.getX(), e.getY())){
 				screenstatus = "Reorder Tasks";
@@ -1541,6 +1563,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		else if(screenstatus.equals("Set New Timer")){
 			if(claimRewardButton.hover(e.getX(), e.getY())){
 				screenstatus = "Claim Reward";
+				addToCoins = true;
 			}
 			if(setNewTimerButton.hover(e.getX(), e.getY())){
 				screenstatus = "Timer";
