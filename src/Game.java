@@ -46,7 +46,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private Button finishedTimerInput, invisibleButton2;
 	private Button yesButton, noButton;
 	private Button claimRewardButton, selectNewTaskButton, setNewTimerButton;
-	private Button backButton,purchaseButton,addButton;
+	private Button backButton,purchaseButton,addButton, editButton;
 	private Button backToTimerButton;
 	
 	private TextBox taskNameInput, taskDateInput, taskRewardInput, taskPositionInput;
@@ -67,7 +67,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private int setSeconds;
 	private int hours;
 	private int minutes;
-	private int seconds;
+	private int seconds, b;
 	private double testX = centerXPosition(40);
 	private double testY = centerYPosition(40);
 	private double diameter = 200;
@@ -99,6 +99,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	private boolean timer;
 	private boolean confirmTaskDeletionNotif = false;
 	private boolean addToCoins = false;
+	private boolean dragNDrop = false;
 	
 	//Strings
 	//private String screenstatus = "Start Up";
@@ -143,6 +144,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		
 		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
+
+		editButton = new Button(0,0,50,50,new ImageIcon("Checkmark2.png"));
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
@@ -157,7 +160,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		leftArrowButton = new Button(centerXPosition(100)-600, centerYPosition(130)-50, 100,130, new ImageIcon ("LeftArrowButton.png"));
 		selectButton = new Button (centerXPosition(170)-110, 550, 170,70, new ImageIcon("SelectButton.png"));
 		removeButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("RemoveButton.png"));
-		//coconuts
 		purchaseButton = new Button (centerXPosition(200)-110, 550, 200,70, new ImageIcon("PurchaseButton.png"));
 		addButton = new Button(centerXPosition(190)+110, 550, 190,70, new ImageIcon ("AddButton.png"));
 		viewTasksButton = new Button(centerXPosition(280), centerYPosition(80)+120, 280,80, new ImageIcon("NewViewTaskButton.png"));
@@ -219,7 +221,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		g2d.setColor(Color.WHITE);
 		((Graphics2D) g2d).setStroke(new BasicStroke(10));
 		
-		System.out.println(coins);
+		//System.out.println(coins);
 		//Start Screen
 		if(screenstatus.equals("Start Up")) {
 			StartUpScreen(g2d);
@@ -419,8 +421,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			displayTaskElement(g2d, current.getName(),175);
 
 			//coconuts the two lines below this are temporary until you add the new graphics and a way to show when something is unlocked/added
-			displayTaskElement(g2d, "Unlocked: " + current.getUnlocked(),50);
-			displayTaskElement(g2d, "Added: " + current.getAdded(),125);
+			displayTaskElement(g2d, "My Coins: " + coins,500);
+			displayTaskElement(g2d, "Cost: " + current.getPrice(),125);
 
 			g2d.drawImage(current.getImg().getImage(),centerXPosition((int)current.getW()*3),centerYPosition((int)current.getH()*3),(int)current.getW()*3,(int)current.getH()*3,this);
 		} else {
@@ -655,14 +657,39 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			}
 		}
 		else {
-			thisAnim = animRand.get((int)(Math.random()*(animRand.size())));
+			b = (int)(Math.random()*(animRand.size()));
+			thisAnim = animRand.get(b);
 			thisStart = System.currentTimeMillis();
 		}
 		drawButton(g2d, backToTimerButton);
+		drawButton(g2d, editButton);
 
-		for(CharacterObject c: storeOptions){
+		for(int i = storeOptions.size()-1; i>=0; i--){
+
+			CharacterObject c = storeOptions.get(i);
 			if(c.getAdded()){
 				drawObject(g2d,c);
+
+				if(b == 0){
+						if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
+
+						c.setY(c.getY()-1);
+				} else {
+				if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
+					if(c.getX()>50 && c.getX()<600 && c.getY()<385){
+						fallTo(c,385);
+					} else if(c.getX()<50 && c.getY()<370){
+						fallTo(c,370);
+					} else if(c.getX()>600 && c.getX()<800){
+						fallTo(c,355);
+					} else if(c.getX()>800 && c.getX()<1100){
+						fallTo(c,345);
+					} else if(c.getX()>1100 && c.getX()<1200){
+						fallTo(c,350);
+					} else if(c.getX()>1200){
+						fallTo(c,385);
+					}
+				}
 			}
 		}
 	}
@@ -675,6 +702,15 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	TODO Display
 	 */
 
+	 private void fallTo(CharacterObject c, int goal){
+		double current = c.getY();
+
+		while(current<goal){
+			c.setY(current + 1);
+			goal = (int)current;
+			System.out.println(current<goal);
+		}
+	 }
 	 private void displayTaskElement(Graphics g2d, String inputString, int yValue){
 		int tempFontSize = 30;
 
@@ -855,6 +891,21 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		storeOptions.add(new CharacterObject(0,350,100,100,new ImageIcon("Plant 3.png"),50,"Plant 3"));
 		storeOptions.add(new CharacterObject(0,0,75,75,new ImageIcon("Plant 4.png"),50,"Plant 4"));
 		storeOptions.add(new CharacterObject(0,0,100,100,new ImageIcon("Plant 5.png"),50,"Plant 5"));
+
+		storeOptions.add(new CharacterObject(0,0,150,150,new ImageIcon("Geology Kit.png"),50,"Geology Kit"));
+		storeOptions.add(new CharacterObject(0,0,100,100,new ImageIcon("Green Book.png"),50,"Green Book"));
+		storeOptions.add(new CharacterObject(0,0,100,100,new ImageIcon("Pink Book.png"),50,"Pink Book"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Motivational Poster.png"),50,"Motivational Poster"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Hanging Picture 1.png"),50,"Hanging Picture"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Hanging Picture 2.png"),50,"Landscaped Picture"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Hanging Picture 3.png"),50,"Friendly Picture"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Hanging Picture 4.png"),50,"Patterned Picture"));
+		storeOptions.add(new CharacterObject(315,275,100,100,new ImageIcon("Pendant Flag.png"),50,"Pendant Flag"));
+
+
+
+
+
 	}
 
 	public void nullThese(){
@@ -1075,8 +1126,19 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	 */
 	
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		
+	public void mouseDragged(MouseEvent e) {
+		if(screenstatus.equals("Interior")){
+			if(dragNDrop){
+			for(CharacterObject c: storeOptions){
+				if(c.getAdded()&&c.hover(e.getX(),e.getY())){
+					c.setX(e.getX()-c.getW()/2);
+					c.setY(e.getY()-c.getH()/2);
+					System.out.println(c.getY());
+					break;
+				}
+			}
+		}
+		}
 	}
 	
 	@Override
@@ -1526,7 +1588,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 							setHours = 0;
 					}
 					setMinutes = Integer.valueOf(minutesInput.getAffiliatedText());
-					System.out.println(setMinutes);
+					//System.out.println(setMinutes);
 					nullThese();
 					begintime = System.currentTimeMillis();
 					finishedTimerInput.setImg(new ImageIcon ("Timer Input GIF.gif"));
@@ -1565,6 +1627,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		if(screenstatus.equals("Interior")){
 			if(backToTimerButton.hover(e.getX(), e.getY())){
 				screenstatus = "Countdown";
+			} 
+			if(editButton.hover(e.getX(), e.getY())){
+				dragNDrop = true;
 			} 
 		}
 
