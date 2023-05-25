@@ -145,7 +145,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		startButton = new Button(20, 0, 1400, 725, new ImageIcon("Spaceship Icon.png"));
 		invisibleButton = new Button(527, 155, 262, 357, new ImageIcon("nan.png"));
 
-		editButton = new Button(0,0,50,50,new ImageIcon("Checkmark2.png"));
+		editButton = new Button(20,20,75,75,new ImageIcon("Edit Icon.png"));
 		
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
 		aboutButton = new Button (350,300,140,56, new ImageIcon ("AboutButtonn2.png"));
@@ -367,8 +367,8 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 	
 	private void StartUpScreen(Graphics g2d) {
 		g2d.drawImage(new ImageIcon("Loading Frame.png").getImage(), 0,0,getWidth(),getHeight(),this);
-		generateAll();
 		if(!called) {
+			generateAll();
 			starttime = System.currentTimeMillis();
 			called = true;
 		}
@@ -708,7 +708,6 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		while(current<goal){
 			c.setY(current + 1);
 			goal = (int)current;
-			System.out.println(current<goal);
 		}
 	 }
 	 private void displayTaskElement(Graphics g2d, String inputString, int yValue){
@@ -1354,6 +1353,20 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 			} else{
 				backToTimerButton.setImg(new ImageIcon ("BackToTimerButton.png"));
 			}
+
+			if(dragNDrop){
+				if(editButton.hover(e.getX(), e.getY())){
+					editButton.setImg(new ImageIcon ("Edit Icon.png"));
+				} else{
+					editButton.setImg(new ImageIcon ("Edit Icon Light.png"));
+				}
+			} else {
+				if(editButton.hover(e.getX(), e.getY())){
+					editButton.setImg(new ImageIcon ("Edit Icon Light.png"));
+				} else{
+					editButton.setImg(new ImageIcon ("Edit Icon.png"));
+				}
+			}
 		}
 		
 		
@@ -1629,7 +1642,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				screenstatus = "Countdown";
 			} 
 			if(editButton.hover(e.getX(), e.getY())){
-				dragNDrop = true;
+				dragNDrop = !dragNDrop;
 			} 
 		}
 
