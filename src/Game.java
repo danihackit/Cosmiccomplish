@@ -673,7 +673,7 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				if(b == 0){
 						if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
 
-						if(c.getY()>0 && System.currentTimeMillis() - thisStart >= 13000 && System.currentTimeMillis() - thisStart <= 32500){
+						if(c.getY()>0 && System.currentTimeMillis() - thisStart >= 13000 && System.currentTimeMillis() - thisStart <= 33000){
 							c.setY(c.getY()-0.5);
 						} else {
 							if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
