@@ -671,9 +671,27 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				drawObject(g2d,c);
 
 				if(b == 0){
-						// if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
+						if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
 
-						// c.setY(c.getY()-1);
+						if(c.getY()>0 && System.currentTimeMillis() - thisStart >= 13000 && System.currentTimeMillis() - thisStart <= 32500){
+							c.setY(c.getY()-0.5);
+						} else {
+							if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
+								if(c.getX()>50 && c.getX()<600 && c.getY()<385){
+									fallTo(c,385);
+								} else if(c.getX()<50 && c.getY()<370){
+									fallTo(c,370);
+								} else if(c.getX()>600 && c.getX()<800){
+									fallTo(c,355);
+								} else if(c.getX()>800 && c.getX()<1100){
+									fallTo(c,345);
+								} else if(c.getX()>1100 && c.getX()<1200){
+									fallTo(c,350);
+								} else if(c.getX()>1200){
+									fallTo(c,385);
+								}
+						}
+				
 				} else {
 				if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
 					if(c.getX()>50 && c.getX()<600 && c.getY()<385){
@@ -1018,8 +1036,12 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 		
 		if(key==73){ // I
-			screenstatus = ("Input");
-			inputStat = true;
+			if(b!=0){
+				b=0;
+			}
+			else {
+				b=1;
+			}
 		}
 
 		if(key==82){ // R
