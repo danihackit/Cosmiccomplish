@@ -2,8 +2,6 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-import javafx.scene.shape.SVGPath;
-
 public class CharacterObject {
 	private double x,y,w,h;
 	private int xm,ym;
@@ -162,6 +160,13 @@ public class CharacterObject {
 		Rectangle p = new Rectangle((int)getX(), (int)getY(), (int)getW(), (int)getH());
 		
 		if(p.intersects(sp)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean hover(int mouseX, int mouseY) {
+		if(((getY() <= mouseY&& mouseY <=  getY() +  getH()) && ( getX() <= mouseX&& mouseX <=  getX() +  getW()))){
 			return true;
 		}
 		return false;
