@@ -671,9 +671,9 @@ public class Game  extends JPanel implements Runnable, KeyListener, MouseListene
 				drawObject(g2d,c);
 
 				if(b == 0){
-						if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
+						// if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
 
-						c.setY(c.getY()-1);
+						// c.setY(c.getY()-1);
 				} else {
 				if(!c.getName().equals("Hanging Picture") && !c.getName().equals("Landscaped Picture") && !c.getName().equals("Friendly Picture") && !c.getName().equals("Patterned Picture") && !c.getName().equals("Motivational Poster")&& !c.getName().equals("Pendant Flag"))
 					if(c.getX()>50 && c.getX()<600 && c.getY()<385){
